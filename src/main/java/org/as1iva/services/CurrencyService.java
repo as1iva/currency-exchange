@@ -13,4 +13,9 @@ public class CurrencyService {
     public CurrencyService(CurrencyDAO currencyDAO) {
         this.currencyDAO = currencyDAO;
     }
+
+    public void add(CurrencyDTO currencyDTO) throws SQLException {
+        Currency currency = new Currency(null, currencyDTO.getCode(), currencyDTO.getFullName(), currencyDTO.getSign());
+        currencyDAO.add(currency);
+    }
 }
