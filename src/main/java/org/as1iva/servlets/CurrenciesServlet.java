@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.as1iva.dao.CurrencyDAO;
 import org.as1iva.dto.CurrencyDTO;
+import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.services.CurrencyService;
 
 import java.io.IOException;
@@ -25,11 +26,11 @@ public class CurrenciesServlet extends HttpServlet {
         String name = req.getParameter("name");
         String sign = req.getParameter("sign");
 
-        CurrencyDTO currencyDTO = new CurrencyDTO(code, name, sign);
+        CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code, name, sign);
 
         CurrencyService currencyService = new CurrencyService(CurrencyDAO.getInstance());
         try {
-            currencyService.add(currencyDTO);
+            currencyService.add(currencyRequestDTO);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

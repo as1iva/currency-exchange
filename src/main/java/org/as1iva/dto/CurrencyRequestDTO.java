@@ -1,11 +1,11 @@
 package org.as1iva.dto;
 
-public class CurrencyDTO{
+public class CurrencyRequestDTO {
     private String code;
     private String fullName;
     private String sign;
 
-    public CurrencyDTO(String code, String fullName, String sign) {
+    public CurrencyRequestDTO(String code, String fullName, String sign) {
         this.code = code;
         this.fullName = fullName;
         this.sign = sign;
