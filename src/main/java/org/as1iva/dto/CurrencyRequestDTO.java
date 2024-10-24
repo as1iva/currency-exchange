@@ -1,6 +1,7 @@
 package org.as1iva.dto;
 
 public class CurrencyRequestDTO {
+    private Integer id;
     private String code;
     private String fullName;
     private String sign;
@@ -9,6 +10,18 @@ public class CurrencyRequestDTO {
         this.code = code;
         this.fullName = fullName;
         this.sign = sign;
+    }
+
+    public CurrencyRequestDTO(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getCode() {
