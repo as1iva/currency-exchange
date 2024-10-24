@@ -6,6 +6,8 @@ import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.models.Currency;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CurrencyService {
@@ -38,5 +40,22 @@ public class CurrencyService {
         } else {
             return new CurrencyResponseDTO(null, null, null, null);
         }
+    }
+
+    public List<CurrencyResponseDTO> getAll() throws SQLException {
+        List<CurrencyResponseDTO> currencyResponseDTOS = new ArrayList<>();
+
+        List<Currency> currencies = currencyDAO.getAll();
+
+        for (Currency currency : currencies) {
+            currencyResponseDTOS.add(new CurrencyResponseDTO(
+                    currency.getId(),
+                    currency.getCode(),
+                    currency.getFullName(),
+                    currency.getSign()
+            ));
+        }
+
+        return currencyResponseDTOS;
     }
 }
