@@ -6,6 +6,7 @@ import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.models.Currency;
 
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class CurrencyService {
 
@@ -21,5 +22,21 @@ public class CurrencyService {
 
         return new CurrencyResponseDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
+
+    public CurrencyResponseDTO getById(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
+        Integer id = currencyRequestDTO.getId();
+
+        Optional<Currency> currency = currencyDAO.getById(id);
+
+        if (currency.isPresent()) {
+            Currency currency1 = currency.get();
+            return new CurrencyResponseDTO(
+                    currency1.getId(),
+                    currency1.getCode(),
+                    currency1.getFullName(),
+                    currency1.getSign());
+        } else {
+            return new CurrencyResponseDTO(null, null, null, null);
+        }
     }
 }
