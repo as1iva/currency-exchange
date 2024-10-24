@@ -3,12 +3,12 @@ package org.as1iva.models;
 import java.math.BigDecimal;
 
 public class ExchangeRate {
-    private int id;
+    private Integer id;
     private int baseCurrencyId;
     private int targetCurrencyId;
     private BigDecimal rate;
 
-    public ExchangeRate(int id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public ExchangeRate(Integer id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
         this.id = id;
         this.baseCurrencyId = baseCurrencyId;
         this.targetCurrencyId = targetCurrencyId;
@@ -18,11 +18,11 @@ public class ExchangeRate {
     public ExchangeRate() {
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
