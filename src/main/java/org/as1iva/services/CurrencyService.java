@@ -1,7 +1,8 @@
 package org.as1iva.services;
 
 import org.as1iva.dao.CurrencyDAO;
-import org.as1iva.dto.CurrencyDTO;
+import org.as1iva.dto.CurrencyRequestDTO;
+import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.models.Currency;
 
 import java.sql.SQLException;
@@ -14,8 +15,11 @@ public class CurrencyService {
         this.currencyDAO = currencyDAO;
     }
 
-    public void add(CurrencyDTO currencyDTO) throws SQLException {
-        Currency currency = new Currency(null, currencyDTO.getCode(), currencyDTO.getFullName(), currencyDTO.getSign());
-        currencyDAO.add(currency);
+    public CurrencyResponseDTO add(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
+        Currency currency = new Currency(null, currencyRequestDTO.getCode(), currencyRequestDTO.getFullName(), currencyRequestDTO.getSign());
+        currency = currencyDAO.add(currency);
+
+        return new CurrencyResponseDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
+    }
     }
 }
