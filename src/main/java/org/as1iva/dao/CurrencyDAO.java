@@ -36,6 +36,8 @@ public class CurrencyDAO implements DAO<Currency> {
             WHERE ID = ?
             """;
 
+    private static final int ID_COLUMN_INDEX = 1;
+
     private CurrencyDAO() {
     }
 
@@ -57,7 +59,7 @@ public class CurrencyDAO implements DAO<Currency> {
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 
             if (generatedKeys.next()) {
-                currency.setId(generatedKeys.getInt("ID"));
+                currency.setId(generatedKeys.getInt(ID_COLUMN_INDEX));
             }
 
             return currency;
