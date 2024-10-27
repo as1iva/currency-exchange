@@ -13,6 +13,8 @@ import org.as1iva.services.CurrencyService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
@@ -39,6 +41,31 @@ public class CurrenciesServlet extends HttpServlet {
             resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(jsonResponse);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        CurrencyService currencyService = new CurrencyService(CurrencyDAO.getInstance());
+
+        try {
+            List<CurrencyResponseDTO> currencyResponseDTOS = currencyService.getAll();
+
+            List<String> jsonResponses = new ArrayList<>();
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            for (CurrencyResponseDTO currency : currencyResponseDTOS) {
+                String jsonResponse = objectMapper.writeValueAsString(currency);
+
+                jsonResponses.add(jsonResponse);
+            }
+
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(String.valueOf(jsonResponses));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
