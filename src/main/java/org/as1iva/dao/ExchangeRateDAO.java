@@ -39,6 +39,8 @@ public class ExchangeRateDAO implements DAO<ExchangeRate>{
             WHERE ID = ?
             """;
 
+    private static final int ID_COLUMN_INDEX = 1;
+
     private ExchangeRateDAO() {
     }
 
@@ -60,7 +62,7 @@ public class ExchangeRateDAO implements DAO<ExchangeRate>{
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 
             if (generatedKeys.next()) {
-                exchangeRate.setId(generatedKeys.getInt("ID"));
+                exchangeRate.setId(generatedKeys.getInt(ID_COLUMN_INDEX));
             }
 
             return exchangeRate;
