@@ -1,13 +1,14 @@
 package org.as1iva.servlets;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.as1iva.dao.CurrencyDAO;
-import org.as1iva.dto.CurrencyDTO;
 import org.as1iva.dto.CurrencyRequestDTO;
+import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.services.CurrencyService;
 
 import java.io.IOException;
@@ -30,14 +31,17 @@ public class CurrenciesServlet extends HttpServlet {
 
         CurrencyService currencyService = new CurrencyService(CurrencyDAO.getInstance());
         try {
-            currencyService.add(currencyRequestDTO);
+            CurrencyResponseDTO currencyResponseDTO = currencyService.add(currencyRequestDTO);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(jsonResponse);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        resp.setContentType("application/json");
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().println("Success");
     }
 
     @Override
