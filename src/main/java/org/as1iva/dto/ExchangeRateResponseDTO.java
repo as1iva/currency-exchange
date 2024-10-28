@@ -4,14 +4,14 @@ import java.math.BigDecimal;
 
 public class ExchangeRateResponseDTO {
     private Integer id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private CurrencyResponseDTO baseCurrency;
+    private CurrencyResponseDTO targetCurrency;
     private BigDecimal rate;
 
-    public ExchangeRateResponseDTO(Integer id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public ExchangeRateResponseDTO(Integer id, CurrencyResponseDTO baseCurrency, CurrencyResponseDTO targetCurrency, BigDecimal rate) {
         this.id = id;
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
 
@@ -23,20 +23,20 @@ public class ExchangeRateResponseDTO {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public CurrencyResponseDTO getBaseCurrency() {
+        return baseCurrency;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrency(CurrencyResponseDTO baseCurrency) {
+        this.baseCurrency = baseCurrency;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public CurrencyResponseDTO getTargetCurrency() {
+        return targetCurrency;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrency(CurrencyResponseDTO targetCurrency) {
+        this.targetCurrency = targetCurrency;
     }
 
     public BigDecimal getRate() {
