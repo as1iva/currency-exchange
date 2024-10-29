@@ -22,44 +22,44 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateResponseDTO add(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
+        Optional<Currency> baseCurrency = currencyDAO.getById(exchangeRateRequestDTO.getBaseCurrencyId());
+        Optional<Currency> targetCurrency = currencyDAO.getById(exchangeRateRequestDTO.getTargetCurrencyId());
+
+        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
+            // TODO: обработать ошибку
+            return new ExchangeRateResponseDTO(null, null, null, null);
+        }
+
+        Currency newBaseCurrency = baseCurrency.get();
+        Currency newTargetCurrency = targetCurrency.get();
+
         ExchangeRate exchangeRate = new ExchangeRate(
                 null,
-                exchangeRateRequestDTO.getBaseCurrencyId(),
-                exchangeRateRequestDTO.getTargetCurrencyId(),
+                newBaseCurrency.getId(),
+                newTargetCurrency.getId(),
                 exchangeRateRequestDTO.getRate());
 
         exchangeRate = exchangeRateDAO.add(exchangeRate);
 
-        Optional<Currency> baseCurrency = currencyDAO.getById(exchangeRate.getBaseCurrencyId());
-        Optional<Currency> targetCurrency = currencyDAO.getById(exchangeRate.getTargetCurrencyId());
+        CurrencyResponseDTO baseCurrencyResponseDTO = new CurrencyResponseDTO(
+                newBaseCurrency.getId(),
+                newBaseCurrency.getCode(),
+                newBaseCurrency.getFullName(),
+                newBaseCurrency.getSign()
+        );
 
-        if (baseCurrency.isPresent() && targetCurrency.isPresent()) {
-            Currency newBaseCurrency = baseCurrency.get();
-            Currency newTargetCurrency = targetCurrency.get();
+        CurrencyResponseDTO targetCurrencyResponseDTO = new CurrencyResponseDTO(
+                newTargetCurrency.getId(),
+                newTargetCurrency.getCode(),
+                newTargetCurrency.getFullName(),
+                newTargetCurrency.getSign()
+        );
 
-            CurrencyResponseDTO baseCurrencyResponseDTO = new CurrencyResponseDTO(
-                    newBaseCurrency.getId(),
-                    newBaseCurrency.getCode(),
-                    newBaseCurrency.getFullName(),
-                    newBaseCurrency.getSign()
-            );
-
-            CurrencyResponseDTO targetCurrencyResponseDTO = new CurrencyResponseDTO(
-                    newTargetCurrency.getId(),
-                    newTargetCurrency.getCode(),
-                    newTargetCurrency.getFullName(),
-                    newTargetCurrency.getSign()
-            );
-
-            return new ExchangeRateResponseDTO(
-                    exchangeRate.getId(),
-                    baseCurrencyResponseDTO,
-                    targetCurrencyResponseDTO,
-                    exchangeRate.getRate()
-            );
-        } else {
-            // TODO: обработать ошибку
-            return new ExchangeRateResponseDTO(null, null, null, null);
-        }
+        return new ExchangeRateResponseDTO(
+                exchangeRate.getId(),
+                baseCurrencyResponseDTO,
+                targetCurrencyResponseDTO,
+                exchangeRate.getRate()
+        );
     }
 }
