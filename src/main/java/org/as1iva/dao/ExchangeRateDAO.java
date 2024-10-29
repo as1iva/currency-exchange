@@ -22,9 +22,22 @@ public class ExchangeRateDAO implements DAO<ExchangeRate>{
             """;
 
     private static final String GET_BY_ID_SQL = """
-            SELECT ID, BaseCurrencyId, TargetCurrencyId, Rate
-            FROM ExchangeRates
-            WHERE ID = ?
+            SELECT
+                ER.ID AS ExchangeRateId,
+                BC.ID AS BaseCurrencyId,
+                BC.Code AS BaseCurrencyCode,
+                BC.FullName AS BaseCurrencyName,
+                BC.Sign AS BaseCurrencySign,
+                TC.ID AS TargetCurrencyId,
+                TC.Code AS TargetCurrencyCode,
+                TC.FullName AS TargetCurrencyName,
+                TC.Sign AS TargetCurrencySign,
+                ER.Rate
+            
+            FROM ExchangeRates ER
+            LEFT JOIN main.Currencies BC on ER.BaseCurrencyId = BC.ID
+            LEFT JOIN main.Currencies TC on ER.TargetCurrencyId = TC.ID
+            WHERE ER.ID = ?
             """;
 
     private static final String GET_ALL_SQL = """
@@ -95,9 +108,19 @@ public class ExchangeRateDAO implements DAO<ExchangeRate>{
 
             while (resultSet.next()) {
                 exchangeRate = new ExchangeRate(
-                        resultSet.getInt("ID"),
-                        resultSet.getInt("BaseCurrencyId"),
-                        resultSet.getInt("TargetCurrencyId"),
+                        resultSet.getInt("ExchangeRateId"),
+                        new Currency(
+                                resultSet.getInt("BaseCurrencyId"),
+                                resultSet.getString("BaseCurrencyCode"),
+                                resultSet.getString("BaseCurrencyName"),
+                                resultSet.getString("BaseCurrencySign")
+                        ),
+                        new Currency(
+                                resultSet.getInt("TargetCurrencyId"),
+                                resultSet.getString("TargetCurrencyCode"),
+                                resultSet.getString("TargetCurrencyName"),
+                                resultSet.getString("TargetCurrencySign")
+                        ),
                         resultSet.getBigDecimal("Rate")
                 );
             }
