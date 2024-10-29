@@ -9,6 +9,8 @@ import org.as1iva.models.Currency;
 import org.as1iva.models.ExchangeRate;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class ExchangeRateService {
@@ -89,5 +91,31 @@ public class ExchangeRateService {
         } else {
             return new ExchangeRateResponseDTO(null, null, null, null);
         }
+    }
+
+    public List<ExchangeRateResponseDTO> getAll() throws SQLException {
+        List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = new ArrayList<>();
+
+        List<ExchangeRate> exchangeRates = exchangeRateDAO.getAll();
+
+        for (ExchangeRate exchangeRate : exchangeRates) {
+            exchangeRateResponseDTOS.add(new ExchangeRateResponseDTO(
+                    exchangeRate.getId(),
+                    new CurrencyResponseDTO(
+                            exchangeRate.getBaseCurrency().getId(),
+                            exchangeRate.getBaseCurrency().getCode(),
+                            exchangeRate.getBaseCurrency().getFullName(),
+                            exchangeRate.getBaseCurrency().getSign()
+                    ),
+                    new CurrencyResponseDTO(
+                            exchangeRate.getTargetCurrency().getId(),
+                            exchangeRate.getTargetCurrency().getCode(),
+                            exchangeRate.getTargetCurrency().getFullName(),
+                            exchangeRate.getTargetCurrency().getSign()
+                    ),
+                    exchangeRate.getRate()
+            ));
+        }
+        return exchangeRateResponseDTOS;
     }
 }
