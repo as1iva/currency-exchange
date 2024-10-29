@@ -14,6 +14,10 @@ public class ExchangeRateRequestDTO {
         this.rate = rate;
     }
 
+    public ExchangeRateRequestDTO(Integer id) {
+        this.id = id;
+    }
+
     public Integer getId() {
         return id;
     }
