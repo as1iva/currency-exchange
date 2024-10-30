@@ -60,9 +60,7 @@ public class ExchangeRateDAO implements DAO<ExchangeRate>{
 
     private static final String UPDATE_SQL = """
             UPDATE ExchangeRates
-            SET BaseCurrencyId = ?,
-                TargetCurrencyId = ?,
-                Rate = ?
+            SET Rate = ?
             WHERE ID = ?
             """;
 
@@ -164,10 +162,8 @@ public class ExchangeRateDAO implements DAO<ExchangeRate>{
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
 
-            preparedStatement.setInt(1, exchangeRate.getBaseCurrencyId());
-            preparedStatement.setInt(2, exchangeRate.getTargetCurrencyId());
-            preparedStatement.setBigDecimal(3, exchangeRate.getRate());
-            preparedStatement.setInt(4, exchangeRate.getId());
+            preparedStatement.setBigDecimal(1, exchangeRate.getRate());
+            preparedStatement.setInt(2, exchangeRate.getId());
 
             preparedStatement.executeUpdate();
         }
