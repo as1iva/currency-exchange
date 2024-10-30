@@ -8,6 +8,7 @@ import org.as1iva.dto.ExchangeRateResponseDTO;
 import org.as1iva.models.Currency;
 import org.as1iva.models.ExchangeRate;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,5 +118,42 @@ public class ExchangeRateService {
             ));
         }
         return exchangeRateResponseDTOS;
+    }
+
+    public ExchangeRateResponseDTO update(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
+        Integer id = exchangeRateRequestDTO.getId();
+        BigDecimal rate = exchangeRateRequestDTO.getRate();
+
+        ExchangeRate exchangeRate = new ExchangeRate(
+                id,
+                null,
+                null,
+                rate);
+
+        exchangeRateDAO.update(exchangeRate);
+
+        Optional<ExchangeRate> exchangeRateOptional = exchangeRateDAO.getById(id);
+
+        if (exchangeRateOptional.isPresent()) {
+            exchangeRate = exchangeRateOptional.get();
+            return new ExchangeRateResponseDTO(
+                    exchangeRate.getId(),
+                    new CurrencyResponseDTO(
+                            exchangeRate.getBaseCurrency().getId(),
+                            exchangeRate.getBaseCurrency().getCode(),
+                            exchangeRate.getBaseCurrency().getFullName(),
+                            exchangeRate.getBaseCurrency().getSign()
+                    ),
+                    new CurrencyResponseDTO(
+                            exchangeRate.getTargetCurrency().getId(),
+                            exchangeRate.getTargetCurrency().getCode(),
+                            exchangeRate.getTargetCurrency().getFullName(),
+                            exchangeRate.getTargetCurrency().getSign()
+                    ),
+                    exchangeRate.getRate()
+            );
+        } else {
+            return new ExchangeRateResponseDTO(null, null, null, null);
+        }
     }
 }
