@@ -13,6 +13,7 @@ import org.as1iva.dto.ExchangeRateResponseDTO;
 import org.as1iva.services.ExchangeRateService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.SQLException;
 
 @WebServlet("/exchangeRate/*")
@@ -43,6 +44,30 @@ public class ExchangeRateServlet extends HttpServlet {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Integer id = Integer.valueOf(req.getParameter("id"));
+        BigDecimal rate = BigDecimal.valueOf(Long.parseLong(req.getParameter("rate")));
+
+        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(id, rate);
+
+        ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+
+        try {
+            ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(jsonResponse);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Override
     public void destroy() {
