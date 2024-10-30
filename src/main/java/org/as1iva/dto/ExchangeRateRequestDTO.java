@@ -14,6 +14,11 @@ public class ExchangeRateRequestDTO {
         this.rate = rate;
     }
 
+    public ExchangeRateRequestDTO(Integer id, BigDecimal rate) {
+        this.id = id;
+        this.rate = rate;
+    }
+
     public ExchangeRateRequestDTO(Integer id) {
         this.id = id;
     }
