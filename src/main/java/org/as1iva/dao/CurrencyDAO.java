@@ -67,10 +67,10 @@ public class CurrencyDAO implements DAO<Currency> {
     }
 
     @Override
-    public Optional<Currency> getById(int id) throws SQLException {
+    public Optional<Currency> getById(Integer id) throws SQLException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_SQL)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setObject(1, id);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
