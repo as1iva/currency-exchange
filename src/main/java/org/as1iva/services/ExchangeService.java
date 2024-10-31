@@ -29,6 +29,10 @@ public class ExchangeService {
 
         Optional<ExchangeRate> directExchangeRateOptional = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
         Optional<ExchangeRate> reverseExchangeRateOptional = exchangeRateDAO.getByCode(targetCurrencyCode, baseCurrencyCode);
+
+        Optional<ExchangeRate> usdToBaseOptional = exchangeRateDAO.getByCode("USD", baseCurrencyCode);
+        Optional<ExchangeRate> usdToTargetOptional = exchangeRateDAO.getByCode("USD", targetCurrencyCode);
+
         Optional<Currency> baseCurrencyOptional = currencyDAO.getByCode(baseCurrencyCode);
         Optional<Currency> targetCurrencyOptional = currencyDAO.getByCode(targetCurrencyCode);
 
@@ -66,6 +70,33 @@ public class ExchangeService {
             BigDecimal dividend = new BigDecimal("1");
 
             BigDecimal rate = dividend.divide(exchangeRate.getRate(), 6, RoundingMode.HALF_UP);
+
+            BigDecimal convertedAmount = rate.multiply(BigDecimal.valueOf(amount));
+
+            return new ExchangeResponseDTO(
+                    new CurrencyResponseDTO(
+                            baseCurrency.getId(),
+                            baseCurrency.getCode(),
+                            baseCurrency.getFullName(),
+                            baseCurrency.getSign()
+                    ),
+                    new CurrencyResponseDTO(
+                            targetCurrency.getId(),
+                            targetCurrency.getCode(),
+                            targetCurrency.getFullName(),
+                            targetCurrency.getSign()
+                    ),
+                    rate,
+                    amount,
+                    convertedAmount
+            );
+        } else if (usdToBaseOptional.isPresent() && usdToTargetOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
+            ExchangeRate usdToBase = usdToBaseOptional.get();
+            ExchangeRate usdToTarget = usdToTargetOptional.get();
+            Currency baseCurrency = baseCurrencyOptional.get();
+            Currency targetCurrency = targetCurrencyOptional.get();
+
+            BigDecimal rate = usdToBase.getRate().divide(usdToTarget.getRate(), 6, RoundingMode.HALF_UP);
 
             BigDecimal convertedAmount = rate.multiply(BigDecimal.valueOf(amount));
 
