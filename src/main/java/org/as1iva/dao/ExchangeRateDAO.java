@@ -21,7 +21,7 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
             VALUES (?, ?, ?)
             """;
 
-    private static final String GET_BY_ID_SQL = """
+    private static final String GET_BY_CODE_SQL = """
             SELECT
                 ER.ID AS ExchangeRateId,
                 BC.ID AS BaseCurrencyId,
@@ -37,7 +37,7 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
             FROM ExchangeRates ER
             LEFT JOIN main.Currencies BC on ER.BaseCurrencyId = BC.ID
             LEFT JOIN main.Currencies TC on ER.TargetCurrencyId = TC.ID
-            WHERE ER.ID = ?
+            WHERE BaseCurrencyCode = ? AND TargetCurrencyCode = ?
             """;
 
     private static final String GET_ALL_SQL = """
@@ -95,10 +95,12 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
     }
 
     @Override
-    public Optional<ExchangeRate> getById(Integer id) throws SQLException {
+    public Optional<ExchangeRate> getByCode(String baseCurrencyCode, String targetCurrencyCode) throws SQLException {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_SQL)) {
-            preparedStatement.setObject(1, id);
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_CODE_SQL)) {
+
+            preparedStatement.setObject(1, baseCurrencyCode);
+            preparedStatement.setObject(2, targetCurrencyCode);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

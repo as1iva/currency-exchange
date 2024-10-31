@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 
 public class ExchangeRateRequestDTO {
     private Integer id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private String baseCurrencyCode;
+    private String targetCurrencyCode;
     private BigDecimal rate;
 
     public ExchangeRateRequestDTO(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
@@ -19,8 +19,9 @@ public class ExchangeRateRequestDTO {
         this.rate = rate;
     }
 
-    public ExchangeRateRequestDTO(Integer id) {
-        this.id = id;
+    public ExchangeRateRequestDTO(String baseCurrencyCode, String targetCurrencyCode) {
+        this.baseCurrencyCode = baseCurrencyCode;
+        this.targetCurrencyCode = targetCurrencyCode;
     }
 
     public Integer getId() {
@@ -31,20 +32,20 @@ public class ExchangeRateRequestDTO {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public String getBaseCurrencyCode() {
+        return baseCurrencyCode;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrencyCode(String baseCurrencyCode) {
+        this.baseCurrencyCode = baseCurrencyCode;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public String getTargetCurrencyCode() {
+        return targetCurrencyCode;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrencyCode(String targetCurrencyCode) {
+        this.targetCurrencyCode = targetCurrencyCode;
     }
 
     public BigDecimal getRate() {

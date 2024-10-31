@@ -66,10 +66,11 @@ public class ExchangeRateService {
         );
     }
 
-    public ExchangeRateResponseDTO getById(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
-        Integer id = exchangeRateRequestDTO.getId();
+    public ExchangeRateResponseDTO getByCode(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
+        String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
+        String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
 
-        Optional<ExchangeRate> exchangeRate = exchangeRateDAO.getById(id);
+        Optional<ExchangeRate> exchangeRate = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
 
         if (exchangeRate.isPresent()) {
             ExchangeRate exchangeRate1 = exchangeRate.get();

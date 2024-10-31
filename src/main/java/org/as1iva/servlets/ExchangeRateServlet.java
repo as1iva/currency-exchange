@@ -25,23 +25,30 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer id = Integer.valueOf(req.getParameter("id"));
+        String pathInfo = req.getPathInfo();
 
-        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(id);
+        if (pathInfo != null && pathInfo.length() > 1) {
+            String codes = pathInfo.substring(1);
 
-        ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+            String baseCurrencyCode = codes.substring(0, 3);
+            String targetCurrencyCode = codes.substring(3, 6);
 
-        try {
-            ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.getById(exchangeRateRequestDTO);
+            ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+            ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            try {
+                ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.getByCode(exchangeRateRequestDTO);
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+
+                resp.setContentType("application/json");
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write(jsonResponse);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
