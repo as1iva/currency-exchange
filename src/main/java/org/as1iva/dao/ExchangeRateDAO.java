@@ -18,7 +18,9 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
 
     private static final String ADD_SQL = """
             INSERT INTO ExchangeRates(BaseCurrencyId, TargetCurrencyId, Rate)
-            VALUES (?, ?, ?)
+            VALUES ((SELECT id FROM Currencies WHERE Code = ?),
+                    (SELECT id FROM Currencies WHERE Code = ?),
+                    ?)
             """;
 
     private static final String GET_BY_CODE_SQL = """
@@ -79,8 +81,8 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL)) {
 
-            preparedStatement.setInt(1, exchangeRate.getBaseCurrencyId());
-            preparedStatement.setInt(2, exchangeRate.getTargetCurrencyId());
+            preparedStatement.setString(1, exchangeRate.getBaseCurrencyCode());
+            preparedStatement.setString(2, exchangeRate.getTargetCurrencyCode());
             preparedStatement.setBigDecimal(3, exchangeRate.getRate());
 
             preparedStatement.executeUpdate();

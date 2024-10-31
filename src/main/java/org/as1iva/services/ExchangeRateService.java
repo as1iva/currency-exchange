@@ -25,8 +25,8 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateResponseDTO add(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
-        Optional<Currency> baseCurrency = currencyDAO.getById(exchangeRateRequestDTO.getBaseCurrencyId());
-        Optional<Currency> targetCurrency = currencyDAO.getById(exchangeRateRequestDTO.getTargetCurrencyId());
+        Optional<Currency> baseCurrency = currencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode());
+        Optional<Currency> targetCurrency = currencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode());
 
         if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
             // TODO: обработать ошибку
