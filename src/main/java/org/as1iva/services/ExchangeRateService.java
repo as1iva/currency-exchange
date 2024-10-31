@@ -33,13 +33,10 @@ public class ExchangeRateService {
             return new ExchangeRateResponseDTO(null, null, null, null);
         }
 
-        Currency newBaseCurrency = baseCurrency.get();
-        Currency newTargetCurrency = targetCurrency.get();
-
         ExchangeRate exchangeRate = new ExchangeRate(
                 null,
-                newBaseCurrency.getId(),
-                newTargetCurrency.getId(),
+                baseCurrency.get().getCode(),
+                targetCurrency.get().getCode(),
                 exchangeRateRequestDTO.getRate());
 
         exchangeRate = exchangeRateDAO.add(exchangeRate);
