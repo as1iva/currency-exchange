@@ -23,23 +23,27 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer id = Integer.valueOf(req.getParameter("id"));
+        String pathInfo = req.getPathInfo();
 
-        CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(id);
+        if (pathInfo != null && pathInfo.length() > 1) {
+            String code = pathInfo.substring(1);
 
-        CurrencyService currencyService = new CurrencyService(CurrencyDAO.getInstance());
+            CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code);
 
-        try {
-            CurrencyResponseDTO currencyResponseDTO = currencyService.getById(currencyRequestDTO);
+            CurrencyService currencyService = new CurrencyService(CurrencyDAO.getInstance());
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+            try {
+                CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+
+                resp.setContentType("application/json");
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write(jsonResponse);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

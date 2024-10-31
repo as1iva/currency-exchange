@@ -17,10 +17,10 @@ public class CurrencyDAO implements DAO<Currency> {
             VALUES (?, ?, ?)
             """;
 
-    private static final String GET_BY_ID_SQL = """
+    private static final String GET_BY_CODE_SQL = """
             SELECT ID, Code, FullName, Sign
             FROM Currencies
-            WHERE ID = ?
+            WHERE Code = ?
             """;
 
     private static final String GET_ALL_SQL = """
@@ -67,10 +67,10 @@ public class CurrencyDAO implements DAO<Currency> {
     }
 
     @Override
-    public Optional<Currency> getById(Integer id) throws SQLException {
+    public Optional<Currency> getByCode(String code) throws SQLException {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID_SQL)) {
-            preparedStatement.setObject(1, id);
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_CODE_SQL)) {
+            preparedStatement.setString(1, code);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 

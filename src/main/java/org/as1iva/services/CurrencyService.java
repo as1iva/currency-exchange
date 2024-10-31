@@ -25,10 +25,10 @@ public class CurrencyService {
         return new CurrencyResponseDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 
-    public CurrencyResponseDTO getById(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
-        Integer id = currencyRequestDTO.getId();
+    public CurrencyResponseDTO getByCode(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
+        String code = currencyRequestDTO.getCode();
 
-        Optional<Currency> currency = currencyDAO.getById(id);
+        Optional<Currency> currency = currencyDAO.getByCode(code);
 
         if (currency.isPresent()) {
             Currency currency1 = currency.get();

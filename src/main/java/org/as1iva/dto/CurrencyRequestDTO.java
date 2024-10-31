@@ -12,8 +12,8 @@ public class CurrencyRequestDTO {
         this.sign = sign;
     }
 
-    public CurrencyRequestDTO(Integer id) {
-        this.id = id;
+    public CurrencyRequestDTO(String code) {
+        this.code = code;
     }
 
     public Integer getId() {
