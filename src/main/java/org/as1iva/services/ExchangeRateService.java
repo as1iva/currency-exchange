@@ -44,24 +44,20 @@ public class ExchangeRateService {
 
         exchangeRate = exchangeRateDAO.add(exchangeRate);
 
-        CurrencyResponseDTO baseCurrencyResponseDTO = new CurrencyResponseDTO(
-                newBaseCurrency.getId(),
-                newBaseCurrency.getCode(),
-                newBaseCurrency.getFullName(),
-                newBaseCurrency.getSign()
-        );
-
-        CurrencyResponseDTO targetCurrencyResponseDTO = new CurrencyResponseDTO(
-                newTargetCurrency.getId(),
-                newTargetCurrency.getCode(),
-                newTargetCurrency.getFullName(),
-                newTargetCurrency.getSign()
-        );
-
         return new ExchangeRateResponseDTO(
                 exchangeRate.getId(),
-                baseCurrencyResponseDTO,
-                targetCurrencyResponseDTO,
+                new CurrencyResponseDTO(
+                        baseCurrency.get().getId(),
+                        baseCurrency.get().getCode(),
+                        baseCurrency.get().getFullName(),
+                        baseCurrency.get().getSign()
+                ),
+                new CurrencyResponseDTO(
+                        targetCurrency.get().getId(),
+                        targetCurrency.get().getCode(),
+                        targetCurrency.get().getFullName(),
+                        targetCurrency.get().getSign()
+                ),
                 exchangeRate.getRate()
         );
     }
