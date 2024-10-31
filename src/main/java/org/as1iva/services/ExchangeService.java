@@ -26,12 +26,12 @@ public class ExchangeService {
         String targetCurrencyCode = exchangeRequestDTO.getTargetCurrencyCode();
         Integer amount = exchangeRequestDTO.getAmount();
 
-        Optional<ExchangeRate> exchangeRateOptional = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        Optional<ExchangeRate> directExchangeRateOptional = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
         Optional<Currency> baseCurrencyOptional = currencyDAO.getByCode(baseCurrencyCode);
         Optional<Currency> targetCurrencyOptional = currencyDAO.getByCode(targetCurrencyCode);
 
-        if (exchangeRateOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
-            ExchangeRate exchangeRate = exchangeRateOptional.get();
+        if (directExchangeRateOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
+            ExchangeRate exchangeRate = directExchangeRateOptional.get();
             Currency baseCurrency = baseCurrencyOptional.get();
             Currency targetCurrency = targetCurrencyOptional.get();
 
