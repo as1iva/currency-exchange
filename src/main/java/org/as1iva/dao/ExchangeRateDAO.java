@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class ExchangeRateDAO implements DAO<ExchangeRate>{
+public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
 
     private static final ExchangeRateDAO INSTANCE = new ExchangeRateDAO();
 
