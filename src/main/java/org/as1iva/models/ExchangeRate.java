@@ -4,16 +4,16 @@ import java.math.BigDecimal;
 
 public class ExchangeRate {
     private Integer id;
-    private int baseCurrencyId;
-    private int targetCurrencyId;
+    private String baseCurrencyCode;
+    private String targetCurrencyCode;
     private Currency baseCurrency;
     private Currency targetCurrency;
     private BigDecimal rate;
 
-    public ExchangeRate(Integer id, int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
+    public ExchangeRate(Integer id, String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         this.id = id;
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+        this.baseCurrencyCode = baseCurrencyCode;
+        this.targetCurrencyCode = targetCurrencyCode;
         this.rate = rate;
     }
 
@@ -51,20 +51,20 @@ public class ExchangeRate {
         this.id = id;
     }
 
-    public int getBaseCurrencyId() {
-        return baseCurrencyId;
+    public String getBaseCurrencyCode() {
+        return baseCurrencyCode;
     }
 
-    public void setBaseCurrencyId(int baseCurrencyId) {
-        this.baseCurrencyId = baseCurrencyId;
+    public void setBaseCurrencyCode(String baseCurrencyCode) {
+        this.baseCurrencyCode = baseCurrencyCode;
     }
 
-    public int getTargetCurrencyId() {
-        return targetCurrencyId;
+    public String getTargetCurrencyCode() {
+        return targetCurrencyCode;
     }
 
-    public void setTargetCurrencyId(int targetCurrencyId) {
-        this.targetCurrencyId = targetCurrencyId;
+    public void setTargetCurrencyCode(String targetCurrencyCode) {
+        this.targetCurrencyCode = targetCurrencyCode;
     }
 
     public BigDecimal getRate() {
@@ -79,8 +79,8 @@ public class ExchangeRate {
     public String toString() {
         return "ExchangeRate{" +
                 "id=" + id +
-                ", baseCurrencyId=" + baseCurrencyId +
-                ", targetCurrencyId=" + targetCurrencyId +
+                ", baseCurrencyCode=" + baseCurrencyCode +
+                ", targetCurrencyCode=" + targetCurrencyCode +
                 ", rate=" + rate +
                 '}';
     }

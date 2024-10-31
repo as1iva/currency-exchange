@@ -61,7 +61,8 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
     private static final String UPDATE_SQL = """
             UPDATE ExchangeRates
             SET Rate = ?
-            WHERE ID = ?
+            WHERE BaseCurrencyId = (SELECT id FROM Currencies WHERE Code = ?)
+            AND TargetCurrencyId = (SELECT id FROM Currencies WHERE Code = ?)
             """;
 
     private static final int ID_COLUMN_INDEX = 1;
@@ -165,7 +166,8 @@ public class ExchangeRateDAO implements ExchangeRateDAOInterface<ExchangeRate>{
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
 
             preparedStatement.setBigDecimal(1, exchangeRate.getRate());
-            preparedStatement.setInt(2, exchangeRate.getId());
+            preparedStatement.setString(2, exchangeRate.getBaseCurrencyCode());
+            preparedStatement.setString(3, exchangeRate.getTargetCurrencyCode());
 
             preparedStatement.executeUpdate();
         }

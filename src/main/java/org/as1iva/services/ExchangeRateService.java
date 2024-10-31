@@ -122,18 +122,19 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateResponseDTO update(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
-        Integer id = exchangeRateRequestDTO.getId();
+        String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
+        String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
         BigDecimal rate = exchangeRateRequestDTO.getRate();
 
         ExchangeRate exchangeRate = new ExchangeRate(
-                id,
                 null,
-                null,
+                baseCurrencyCode,
+                targetCurrencyCode,
                 rate);
 
         exchangeRateDAO.update(exchangeRate);
 
-        Optional<ExchangeRate> exchangeRateOptional = exchangeRateDAO.getById(id);
+        Optional<ExchangeRate> exchangeRateOptional = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
 
         if (exchangeRateOptional.isPresent()) {
             exchangeRate = exchangeRateOptional.get();

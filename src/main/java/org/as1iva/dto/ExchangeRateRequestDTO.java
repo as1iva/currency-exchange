@@ -8,9 +8,9 @@ public class ExchangeRateRequestDTO {
     private String targetCurrencyCode;
     private BigDecimal rate;
 
-    public ExchangeRateRequestDTO(int baseCurrencyId, int targetCurrencyId, BigDecimal rate) {
-        this.baseCurrencyId = baseCurrencyId;
-        this.targetCurrencyId = targetCurrencyId;
+    public ExchangeRateRequestDTO(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
+        this.baseCurrencyCode = baseCurrencyCode;
+        this.targetCurrencyCode = targetCurrencyCode;
         this.rate = rate;
     }
 

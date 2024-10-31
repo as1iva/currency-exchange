@@ -54,24 +54,32 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Integer id = Integer.valueOf(req.getParameter("id"));
-        BigDecimal rate = BigDecimal.valueOf(Long.parseLong(req.getParameter("rate")));
+        String pathInfo = req.getPathInfo();
+        BigDecimal rate = new BigDecimal(req.getParameter("rate"));
 
-        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(id, rate);
+        if (pathInfo != null && pathInfo.length() > 1) {
+            String codes = pathInfo.substring(1);
 
-        ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+            String baseCurrencyCode = codes.substring(0, 3);
+            String targetCurrencyCode = codes.substring(3, 6);
 
-        try {
-            ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+            ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+
+            try {
+                ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+
+                resp.setContentType("application/json");
+                resp.setStatus(HttpServletResponse.SC_OK);
+                resp.getWriter().write(jsonResponse);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
