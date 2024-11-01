@@ -1,6 +1,6 @@
 package org.as1iva.services;
 
-import org.as1iva.dao.CurrencyDAO;
+import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.models.Currency;
@@ -12,15 +12,15 @@ import java.util.Optional;
 
 public class CurrencyService {
 
-    private final CurrencyDAO currencyDAO;
+    private final JdbcCurrencyDAO jdbcCurrencyDAO;
 
-    public CurrencyService(CurrencyDAO currencyDAO) {
-        this.currencyDAO = currencyDAO;
+    public CurrencyService(JdbcCurrencyDAO jdbcCurrencyDAO) {
+        this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
     public CurrencyResponseDTO add(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
         Currency currency = new Currency(null, currencyRequestDTO.getCode(), currencyRequestDTO.getFullName(), currencyRequestDTO.getSign());
-        currency = currencyDAO.add(currency);
+        currency = jdbcCurrencyDAO.add(currency);
 
         return new CurrencyResponseDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
@@ -28,7 +28,7 @@ public class CurrencyService {
     public CurrencyResponseDTO getByCode(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
         String code = currencyRequestDTO.getCode();
 
-        Optional<Currency> currency = currencyDAO.getByCode(code);
+        Optional<Currency> currency = jdbcCurrencyDAO.getByCode(code);
 
         if (currency.isPresent()) {
             Currency currency1 = currency.get();
@@ -45,7 +45,7 @@ public class CurrencyService {
     public List<CurrencyResponseDTO> getAll() throws SQLException {
         List<CurrencyResponseDTO> currencyResponseDTOS = new ArrayList<>();
 
-        List<Currency> currencies = currencyDAO.getAll();
+        List<Currency> currencies = jdbcCurrencyDAO.getAll();
 
         for (Currency currency : currencies) {
             currencyResponseDTOS.add(new CurrencyResponseDTO(

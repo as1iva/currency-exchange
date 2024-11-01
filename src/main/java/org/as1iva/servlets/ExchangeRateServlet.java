@@ -6,8 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.as1iva.dao.CurrencyDAO;
-import org.as1iva.dao.ExchangeRateDAO;
+import org.as1iva.dao.JdbcCurrencyDAO;
+import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRateRequestDTO;
 import org.as1iva.dto.ExchangeRateResponseDTO;
 import org.as1iva.services.ExchangeRateService;
@@ -35,7 +35,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
             ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode);
 
-            ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+            ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
             try {
                 ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.getByCode(exchangeRateRequestDTO);
@@ -66,7 +66,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
             ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
 
-            ExchangeRateService exchangeRateService = new ExchangeRateService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+            ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
             try {
                 ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);

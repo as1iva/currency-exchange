@@ -6,7 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.as1iva.dao.CurrencyDAO;
+import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.services.CurrencyService;
@@ -30,7 +30,7 @@ public class CurrencyServlet extends HttpServlet {
 
             CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code);
 
-            CurrencyService currencyService = new CurrencyService(CurrencyDAO.getInstance());
+            CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
 
             try {
                 CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);

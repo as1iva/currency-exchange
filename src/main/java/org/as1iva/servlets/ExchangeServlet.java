@@ -6,8 +6,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.as1iva.dao.CurrencyDAO;
-import org.as1iva.dao.ExchangeRateDAO;
+import org.as1iva.dao.JdbcCurrencyDAO;
+import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
 import org.as1iva.services.ExchangeService;
@@ -30,7 +30,7 @@ public class ExchangeServlet extends HttpServlet {
 
         ExchangeRequestDTO exchangeRequestDTO = new ExchangeRequestDTO(baseCurrencyCode, targetCurrencyCode, amount);
 
-        ExchangeService exchangeService = new ExchangeService(ExchangeRateDAO.getInstance(), CurrencyDAO.getInstance());
+        ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
         try {
             ExchangeResponseDTO exchangeResponseDTO = exchangeService.exchange(exchangeRequestDTO);

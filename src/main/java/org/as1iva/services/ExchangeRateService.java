@@ -1,7 +1,7 @@
 package org.as1iva.services;
 
-import org.as1iva.dao.CurrencyDAO;
-import org.as1iva.dao.ExchangeRateDAO;
+import org.as1iva.dao.JdbcCurrencyDAO;
+import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRateRequestDTO;
 import org.as1iva.dto.ExchangeRateResponseDTO;
@@ -16,17 +16,17 @@ import java.util.Optional;
 
 public class ExchangeRateService {
 
-    private final ExchangeRateDAO exchangeRateDAO;
-    private final CurrencyDAO currencyDAO;
+    private final JdbcExchangeRateDAO jdbcExchangeRateDAO;
+    private final JdbcCurrencyDAO jdbcCurrencyDAO;
 
-    public ExchangeRateService(ExchangeRateDAO exchangeRateDAO, CurrencyDAO currencyDAO) {
-        this.exchangeRateDAO = exchangeRateDAO;
-        this.currencyDAO = currencyDAO;
+    public ExchangeRateService(JdbcExchangeRateDAO jdbcExchangeRateDAO, JdbcCurrencyDAO jdbcCurrencyDAO) {
+        this.jdbcExchangeRateDAO = jdbcExchangeRateDAO;
+        this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
     public ExchangeRateResponseDTO add(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
-        Optional<Currency> baseCurrency = currencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode());
-        Optional<Currency> targetCurrency = currencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode());
+        Optional<Currency> baseCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode());
+        Optional<Currency> targetCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode());
 
         if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
             // TODO: обработать ошибку
@@ -39,7 +39,7 @@ public class ExchangeRateService {
                 targetCurrency.get().getCode(),
                 exchangeRateRequestDTO.getRate());
 
-        exchangeRate = exchangeRateDAO.add(exchangeRate);
+        exchangeRate = jdbcExchangeRateDAO.add(exchangeRate);
 
         return new ExchangeRateResponseDTO(
                 exchangeRate.getId(),
@@ -63,7 +63,7 @@ public class ExchangeRateService {
         String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
         String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
 
-        Optional<ExchangeRate> exchangeRate = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        Optional<ExchangeRate> exchangeRate = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
 
         if (exchangeRate.isPresent()) {
             ExchangeRate exchangeRate1 = exchangeRate.get();
@@ -91,7 +91,7 @@ public class ExchangeRateService {
     public List<ExchangeRateResponseDTO> getAll() throws SQLException {
         List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = new ArrayList<>();
 
-        List<ExchangeRate> exchangeRates = exchangeRateDAO.getAll();
+        List<ExchangeRate> exchangeRates = jdbcExchangeRateDAO.getAll();
 
         for (ExchangeRate exchangeRate : exchangeRates) {
             exchangeRateResponseDTOS.add(new ExchangeRateResponseDTO(
@@ -125,9 +125,9 @@ public class ExchangeRateService {
                 targetCurrencyCode,
                 rate);
 
-        exchangeRateDAO.update(exchangeRate);
+        jdbcExchangeRateDAO.update(exchangeRate);
 
-        Optional<ExchangeRate> exchangeRateOptional = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
 
         if (exchangeRateOptional.isPresent()) {
             exchangeRate = exchangeRateOptional.get();

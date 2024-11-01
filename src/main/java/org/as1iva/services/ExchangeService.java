@@ -1,7 +1,7 @@
 package org.as1iva.services;
 
-import org.as1iva.dao.CurrencyDAO;
-import org.as1iva.dao.ExchangeRateDAO;
+import org.as1iva.dao.JdbcCurrencyDAO;
+import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
@@ -14,12 +14,12 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class ExchangeService {
-    private final ExchangeRateDAO exchangeRateDAO;
-    private final CurrencyDAO currencyDAO;
+    private final JdbcExchangeRateDAO jdbcExchangeRateDAO;
+    private final JdbcCurrencyDAO jdbcCurrencyDAO;
 
-    public ExchangeService(ExchangeRateDAO exchangeRateDAO, CurrencyDAO currencyDAO) {
-        this.exchangeRateDAO = exchangeRateDAO;
-        this.currencyDAO = currencyDAO;
+    public ExchangeService(JdbcExchangeRateDAO jdbcExchangeRateDAO, JdbcCurrencyDAO jdbcCurrencyDAO) {
+        this.jdbcExchangeRateDAO = jdbcExchangeRateDAO;
+        this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
     public ExchangeResponseDTO exchange(ExchangeRequestDTO exchangeRequestDTO) throws SQLException {
@@ -27,14 +27,14 @@ public class ExchangeService {
         String targetCurrencyCode = exchangeRequestDTO.getTargetCurrencyCode();
         Integer amount = exchangeRequestDTO.getAmount();
 
-        Optional<ExchangeRate> directExchangeRateOptional = exchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
-        Optional<ExchangeRate> reverseExchangeRateOptional = exchangeRateDAO.getByCode(targetCurrencyCode, baseCurrencyCode);
+        Optional<ExchangeRate> directExchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        Optional<ExchangeRate> reverseExchangeRateOptional = jdbcExchangeRateDAO.getByCode(targetCurrencyCode, baseCurrencyCode);
 
-        Optional<ExchangeRate> usdToBaseOptional = exchangeRateDAO.getByCode("USD", baseCurrencyCode);
-        Optional<ExchangeRate> usdToTargetOptional = exchangeRateDAO.getByCode("USD", targetCurrencyCode);
+        Optional<ExchangeRate> usdToBaseOptional = jdbcExchangeRateDAO.getByCode("USD", baseCurrencyCode);
+        Optional<ExchangeRate> usdToTargetOptional = jdbcExchangeRateDAO.getByCode("USD", targetCurrencyCode);
 
-        Optional<Currency> baseCurrencyOptional = currencyDAO.getByCode(baseCurrencyCode);
-        Optional<Currency> targetCurrencyOptional = currencyDAO.getByCode(targetCurrencyCode);
+        Optional<Currency> baseCurrencyOptional = jdbcCurrencyDAO.getByCode(baseCurrencyCode);
+        Optional<Currency> targetCurrencyOptional = jdbcCurrencyDAO.getByCode(targetCurrencyCode);
 
         if (directExchangeRateOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
             ExchangeRate exchangeRate = directExchangeRateOptional.get();
