@@ -1,5 +1,6 @@
 package org.as1iva.dao;
 
+import org.as1iva.exceptions.DatabaseException;
 import org.as1iva.models.Currency;
 import org.as1iva.models.ExchangeRate;
 import org.as1iva.util.ConnectionManager;
@@ -77,7 +78,7 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO<ExchangeRate> {
     }
 
     @Override
-    public ExchangeRate add(ExchangeRate exchangeRate) throws SQLException {
+    public ExchangeRate add(ExchangeRate exchangeRate) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL)) {
 
@@ -94,11 +95,13 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO<ExchangeRate> {
             }
 
             return exchangeRate;
+        } catch (SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 
     @Override
-    public Optional<ExchangeRate> getByCode(String baseCurrencyCode, String targetCurrencyCode) throws SQLException {
+    public Optional<ExchangeRate> getByCode(String baseCurrencyCode, String targetCurrencyCode) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_CODE_SQL)) {
 
@@ -128,11 +131,13 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO<ExchangeRate> {
                 );
             }
             return Optional.ofNullable(exchangeRate);
+        } catch (SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 
     @Override
-    public List<ExchangeRate> getAll() throws SQLException {
+    public List<ExchangeRate> getAll() {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL)) {
 
@@ -159,11 +164,13 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO<ExchangeRate> {
                 ));
             }
             return exchangeRates;
+        } catch (SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 
     @Override
-    public void update(ExchangeRate exchangeRate) throws SQLException {
+    public void update(ExchangeRate exchangeRate) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
 
@@ -172,6 +179,8 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO<ExchangeRate> {
             preparedStatement.setString(3, exchangeRate.getTargetCurrencyCode());
 
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 }

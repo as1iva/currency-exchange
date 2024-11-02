@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.as1iva.exceptions.DatabaseException;
 import org.as1iva.models.Currency;
 import org.as1iva.util.ConnectionManager;
 
@@ -46,7 +47,7 @@ public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
     }
 
     @Override
-    public Currency add(Currency currency) throws SQLException {
+    public Currency add(Currency currency) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -63,11 +64,13 @@ public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
             }
 
             return currency;
+        } catch(SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 
     @Override
-    public Optional<Currency> getByCode(String code) throws SQLException {
+    public Optional<Currency> getByCode(String code) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_CODE_SQL)) {
             preparedStatement.setString(1, code);
@@ -85,11 +88,13 @@ public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
                 );
             }
             return Optional.ofNullable(currency);
+        } catch(SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 
     @Override
-    public List<Currency> getAll() throws SQLException {
+    public List<Currency> getAll() {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL_SQL)) {
 
@@ -106,11 +111,13 @@ public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
                 ));
             }
             return currencies;
+        } catch(SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 
     @Override
-    public void update(Currency currency) throws SQLException {
+    public void update(Currency currency) {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
 
@@ -120,6 +127,8 @@ public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
             preparedStatement.setInt(4, currency.getId());
 
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseException("Database is unavailable");
         }
     }
 }
