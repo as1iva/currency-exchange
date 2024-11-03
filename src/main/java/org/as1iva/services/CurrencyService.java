@@ -18,14 +18,14 @@ public class CurrencyService {
         this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
-    public CurrencyResponseDTO add(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
+    public CurrencyResponseDTO add(CurrencyRequestDTO currencyRequestDTO)  {
         Currency currency = new Currency(null, currencyRequestDTO.getCode(), currencyRequestDTO.getFullName(), currencyRequestDTO.getSign());
         currency = jdbcCurrencyDAO.add(currency);
 
         return new CurrencyResponseDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
     }
 
-    public CurrencyResponseDTO getByCode(CurrencyRequestDTO currencyRequestDTO) throws SQLException {
+    public CurrencyResponseDTO getByCode(CurrencyRequestDTO currencyRequestDTO) {
         String code = currencyRequestDTO.getCode();
 
         Optional<Currency> currency = jdbcCurrencyDAO.getByCode(code);
@@ -42,7 +42,7 @@ public class CurrencyService {
         }
     }
 
-    public List<CurrencyResponseDTO> getAll() throws SQLException {
+    public List<CurrencyResponseDTO> getAll() {
         List<CurrencyResponseDTO> currencyResponseDTOS = new ArrayList<>();
 
         List<Currency> currencies = jdbcCurrencyDAO.getAll();

@@ -24,7 +24,7 @@ public class ExchangeRateService {
         this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
-    public ExchangeRateResponseDTO add(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
+    public ExchangeRateResponseDTO add(ExchangeRateRequestDTO exchangeRateRequestDTO) {
         Optional<Currency> baseCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode());
         Optional<Currency> targetCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode());
 
@@ -59,7 +59,7 @@ public class ExchangeRateService {
         );
     }
 
-    public ExchangeRateResponseDTO getByCode(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
+    public ExchangeRateResponseDTO getByCode(ExchangeRateRequestDTO exchangeRateRequestDTO) {
         String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
         String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
 
@@ -88,7 +88,7 @@ public class ExchangeRateService {
         }
     }
 
-    public List<ExchangeRateResponseDTO> getAll() throws SQLException {
+    public List<ExchangeRateResponseDTO> getAll() {
         List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = new ArrayList<>();
 
         List<ExchangeRate> exchangeRates = jdbcExchangeRateDAO.getAll();
@@ -114,7 +114,7 @@ public class ExchangeRateService {
         return exchangeRateResponseDTOS;
     }
 
-    public ExchangeRateResponseDTO update(ExchangeRateRequestDTO exchangeRateRequestDTO) throws SQLException {
+    public ExchangeRateResponseDTO update(ExchangeRateRequestDTO exchangeRateRequestDTO) {
         String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
         String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
         BigDecimal rate = exchangeRateRequestDTO.getRate();

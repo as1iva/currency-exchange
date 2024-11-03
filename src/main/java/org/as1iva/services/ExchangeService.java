@@ -22,7 +22,7 @@ public class ExchangeService {
         this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
-    public ExchangeResponseDTO exchange(ExchangeRequestDTO exchangeRequestDTO) throws SQLException {
+    public ExchangeResponseDTO exchange(ExchangeRequestDTO exchangeRequestDTO) {
         String baseCurrencyCode = exchangeRequestDTO.getBaseCurrencyCode();
         String targetCurrencyCode = exchangeRequestDTO.getTargetCurrencyCode();
         Integer amount = exchangeRequestDTO.getAmount();
