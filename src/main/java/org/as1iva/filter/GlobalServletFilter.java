@@ -17,6 +17,8 @@ public class GlobalServletFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        servletResponse.setContentType("application/json");
+
         try {
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (Exception e) {

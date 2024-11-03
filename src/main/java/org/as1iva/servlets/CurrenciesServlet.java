@@ -37,7 +37,6 @@ public class CurrenciesServlet extends HttpServlet {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
 
-        resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(jsonResponse);
     }
@@ -58,7 +57,6 @@ public class CurrenciesServlet extends HttpServlet {
             jsonResponses.add(jsonResponse);
         }
 
-        resp.setContentType("application/json");
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(String.valueOf(jsonResponses));
     }

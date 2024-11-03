@@ -15,7 +15,6 @@ public class ErrorHandler {
         Map<String, String> errorResponse = Map.of("message", e.getMessage());
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
 
-        httpServletResponse.setContentType("application/json");
         httpServletResponse.setStatus(getStatus(e));
         httpServletResponse.getWriter().write(jsonResponse);
     }

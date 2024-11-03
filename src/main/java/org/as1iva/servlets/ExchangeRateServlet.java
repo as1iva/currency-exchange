@@ -42,7 +42,6 @@ public class ExchangeRateServlet extends HttpServlet {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
 
-            resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(jsonResponse);
         }
@@ -69,7 +68,6 @@ public class ExchangeRateServlet extends HttpServlet {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
 
-            resp.setContentType("application/json");
             resp.setStatus(HttpServletResponse.SC_OK);
             resp.getWriter().write(jsonResponse);
         }
