@@ -14,7 +14,6 @@ import org.as1iva.services.ExchangeRateService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,44 +34,37 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
-        try {
-            ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.add(exchangeRateRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+        ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.add(exchangeRateRequestDTO);
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(jsonResponse);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
-        try {
-            List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = exchangeRateService.getAll();
 
-            List<String> jsonResponses = new ArrayList<>();
+        List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = exchangeRateService.getAll();
 
-            ObjectMapper objectMapper = new ObjectMapper();
+        List<String> jsonResponses = new ArrayList<>();
 
-            for (ExchangeRateResponseDTO exchangeRate : exchangeRateResponseDTOS) {
-                String jsonResponse = objectMapper.writeValueAsString(exchangeRate);
+        ObjectMapper objectMapper = new ObjectMapper();
 
-                jsonResponses.add(jsonResponse);
-            }
+        for (ExchangeRateResponseDTO exchangeRate : exchangeRateResponseDTOS) {
+            String jsonResponse = objectMapper.writeValueAsString(exchangeRate);
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(String.valueOf(jsonResponses));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            jsonResponses.add(jsonResponse);
         }
 
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(String.valueOf(jsonResponses));
     }
 
     @Override

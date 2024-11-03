@@ -13,7 +13,6 @@ import org.as1iva.dto.ExchangeResponseDTO;
 import org.as1iva.services.ExchangeService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
@@ -32,19 +31,14 @@ public class ExchangeServlet extends HttpServlet {
 
         ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
-        try {
-            ExchangeResponseDTO exchangeResponseDTO = exchangeService.exchange(exchangeRequestDTO);
+        ExchangeResponseDTO exchangeResponseDTO = exchangeService.exchange(exchangeRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(exchangeResponseDTO);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(exchangeResponseDTO);
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(jsonResponse);
     }
 
     @Override

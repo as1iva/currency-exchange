@@ -12,7 +12,6 @@ import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.services.CurrencyService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,43 +31,36 @@ public class CurrenciesServlet extends HttpServlet {
         CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code, name, sign);
 
         CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
-        try {
-            CurrencyResponseDTO currencyResponseDTO = currencyService.add(currencyRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+        CurrencyResponseDTO currencyResponseDTO = currencyService.add(currencyRequestDTO);
 
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(jsonResponse);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
 
-        try {
-            List<CurrencyResponseDTO> currencyResponseDTOS = currencyService.getAll();
+        List<CurrencyResponseDTO> currencyResponseDTOS = currencyService.getAll();
 
-            List<String> jsonResponses = new ArrayList<>();
+        List<String> jsonResponses = new ArrayList<>();
 
-            ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-            for (CurrencyResponseDTO currency : currencyResponseDTOS) {
-                String jsonResponse = objectMapper.writeValueAsString(currency);
+        for (CurrencyResponseDTO currency : currencyResponseDTOS) {
+            String jsonResponse = objectMapper.writeValueAsString(currency);
 
-                jsonResponses.add(jsonResponse);
-            }
-
-            resp.setContentType("application/json");
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(String.valueOf(jsonResponses));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            jsonResponses.add(jsonResponse);
         }
+
+        resp.setContentType("application/json");
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(String.valueOf(jsonResponses));
     }
 
     @Override

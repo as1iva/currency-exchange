@@ -12,7 +12,6 @@ import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.services.CurrencyService;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
@@ -32,18 +31,15 @@ public class CurrencyServlet extends HttpServlet {
 
             CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
 
-            try {
-                CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);
 
-                ObjectMapper objectMapper = new ObjectMapper();
-                String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+            CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);
 
-                resp.setContentType("application/json");
-                resp.setStatus(HttpServletResponse.SC_OK);
-                resp.getWriter().write(jsonResponse);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+
+            resp.setContentType("application/json");
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.getWriter().write(jsonResponse);
         }
     }
 
