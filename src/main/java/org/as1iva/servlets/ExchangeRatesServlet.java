@@ -11,6 +11,7 @@ import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRateRequestDTO;
 import org.as1iva.dto.ExchangeRateResponseDTO;
 import org.as1iva.services.ExchangeRateService;
+import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -29,6 +30,9 @@ public class ExchangeRatesServlet extends HttpServlet {
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
+
+        ParameterValidator.checkCode(baseCurrencyCode);
+        ParameterValidator.checkCode(targetCurrencyCode);
 
         ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
 
