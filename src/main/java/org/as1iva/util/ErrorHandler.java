@@ -20,8 +20,6 @@ public class ErrorHandler {
     }
 
     private static int getStatus(Exception e) {
-        System.out.println("Exception class: " + e.getClass().getSimpleName());
-
         return switch (e.getClass().getSimpleName()) {
             case "DatabaseException" -> 500;
             case "DataExistsException" -> 409;
