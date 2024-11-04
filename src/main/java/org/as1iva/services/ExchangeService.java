@@ -5,6 +5,7 @@ import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
+import org.as1iva.exceptions.DataNotFoundException;
 import org.as1iva.models.Currency;
 import org.as1iva.models.ExchangeRate;
 
@@ -118,7 +119,7 @@ public class ExchangeService {
                     convertedAmount
             );
         } else {
-            return new ExchangeResponseDTO(null, null, null, null, null);
+            throw new DataNotFoundException("No exchange rates was found");
         }
     }
 }
