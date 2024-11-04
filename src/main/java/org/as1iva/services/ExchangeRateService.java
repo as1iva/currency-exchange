@@ -5,6 +5,7 @@ import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRateRequestDTO;
 import org.as1iva.dto.ExchangeRateResponseDTO;
+import org.as1iva.exceptions.DataExistsException;
 import org.as1iva.exceptions.DataNotFoundException;
 import org.as1iva.models.Currency;
 import org.as1iva.models.ExchangeRate;
@@ -42,6 +43,15 @@ public class ExchangeRateService {
                 baseCurrency.get().getCode(),
                 targetCurrency.get().getCode(),
                 exchangeRateRequestDTO.getRate());
+
+        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(
+                baseCurrency.get().getCode(),
+                targetCurrency.get().getCode()
+        );
+
+        if (exchangeRateOptional.isPresent()) {
+            throw new DataExistsException("Exchange rate already exists");
+        }
 
         exchangeRate = jdbcExchangeRateDAO.add(exchangeRate);
 
