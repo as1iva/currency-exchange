@@ -11,6 +11,7 @@ import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
 import org.as1iva.services.ExchangeService;
+import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;
 
@@ -26,6 +27,10 @@ public class ExchangeServlet extends HttpServlet {
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
         Integer amount = Integer.valueOf(req.getParameter("amount"));
+
+        ParameterValidator.checkCode(baseCurrencyCode);
+        ParameterValidator.checkCode(targetCurrencyCode);
+        ParameterValidator.checkAmount(amount);
 
         ExchangeRequestDTO exchangeRequestDTO = new ExchangeRequestDTO(baseCurrencyCode, targetCurrencyCode, amount);
 
