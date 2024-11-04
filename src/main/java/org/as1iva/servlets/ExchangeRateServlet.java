@@ -23,6 +23,15 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        if ("PATCH".equalsIgnoreCase(req.getMethod())) {
+            doPatch(req, resp);
+        } else {
+            super.service(req, resp);
+        }
+    }
+
+    @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
 
@@ -47,8 +56,7 @@ public class ExchangeRateServlet extends HttpServlet {
         }
     }
 
-    @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
 
