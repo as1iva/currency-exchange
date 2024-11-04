@@ -5,6 +5,7 @@ import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRateRequestDTO;
 import org.as1iva.dto.ExchangeRateResponseDTO;
+import org.as1iva.exceptions.DataNotFoundException;
 import org.as1iva.models.Currency;
 import org.as1iva.models.ExchangeRate;
 
@@ -28,9 +29,12 @@ public class ExchangeRateService {
         Optional<Currency> baseCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode());
         Optional<Currency> targetCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode());
 
-        if (baseCurrency.isEmpty() || targetCurrency.isEmpty()) {
-            // TODO: обработать ошибку
-            return new ExchangeRateResponseDTO(null, null, null, null);
+        if (baseCurrency.isEmpty() && targetCurrency.isEmpty()) {
+            throw new DataNotFoundException("No currency was found");
+        } else if (baseCurrency.isEmpty()) {
+            throw new DataNotFoundException("Base currency not found");
+        } else if (targetCurrency.isEmpty()) {
+            throw new DataNotFoundException("Target currency not found");
         }
 
         ExchangeRate exchangeRate = new ExchangeRate(
@@ -84,7 +88,7 @@ public class ExchangeRateService {
                     exchangeRate1.getRate()
             );
         } else {
-            return new ExchangeRateResponseDTO(null, null, null, null);
+            throw new DataNotFoundException("Exchange rate not found");
         }
     }
 
@@ -129,26 +133,26 @@ public class ExchangeRateService {
 
         Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
 
-        if (exchangeRateOptional.isPresent()) {
-            exchangeRate = exchangeRateOptional.get();
-            return new ExchangeRateResponseDTO(
-                    exchangeRate.getId(),
-                    new CurrencyResponseDTO(
-                            exchangeRate.getBaseCurrency().getId(),
-                            exchangeRate.getBaseCurrency().getCode(),
-                            exchangeRate.getBaseCurrency().getFullName(),
-                            exchangeRate.getBaseCurrency().getSign()
-                    ),
-                    new CurrencyResponseDTO(
-                            exchangeRate.getTargetCurrency().getId(),
-                            exchangeRate.getTargetCurrency().getCode(),
-                            exchangeRate.getTargetCurrency().getFullName(),
-                            exchangeRate.getTargetCurrency().getSign()
-                    ),
-                    exchangeRate.getRate()
-            );
-        } else {
-            return new ExchangeRateResponseDTO(null, null, null, null);
+        if (exchangeRateOptional.isEmpty()) {
+            throw new DataNotFoundException("Exchange rate not found");
         }
+
+        exchangeRate = exchangeRateOptional.get();
+        return new ExchangeRateResponseDTO(
+                exchangeRate.getId(),
+                new CurrencyResponseDTO(
+                        exchangeRate.getBaseCurrency().getId(),
+                        exchangeRate.getBaseCurrency().getCode(),
+                        exchangeRate.getBaseCurrency().getFullName(),
+                        exchangeRate.getBaseCurrency().getSign()
+                ),
+                new CurrencyResponseDTO(
+                        exchangeRate.getTargetCurrency().getId(),
+                        exchangeRate.getTargetCurrency().getCode(),
+                        exchangeRate.getTargetCurrency().getFullName(),
+                        exchangeRate.getTargetCurrency().getSign()
+                ),
+                exchangeRate.getRate()
+        );
     }
 }
