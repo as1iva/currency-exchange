@@ -10,6 +10,7 @@ import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.services.CurrencyService;
+import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +28,10 @@ public class CurrenciesServlet extends HttpServlet {
         String code = req.getParameter("code");
         String name = req.getParameter("name");
         String sign = req.getParameter("sign");
+
+        ParameterValidator.checkCode(code);
+        ParameterValidator.checkName(name);
+        ParameterValidator.checkSign(sign);
 
         CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code, name, sign);
 
