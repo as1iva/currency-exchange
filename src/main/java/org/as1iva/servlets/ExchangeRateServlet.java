@@ -59,26 +59,26 @@ public class ExchangeRateServlet extends HttpServlet {
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
+        String codes = pathInfo.substring(1);
 
-        if (pathInfo != null && pathInfo.length() > 1) {
-            String codes = pathInfo.substring(1);
+        ParameterValidator.checkCodePair(codes);
+        ParameterValidator.checkRate(rate);
 
-            String baseCurrencyCode = codes.substring(0, 3);
-            String targetCurrencyCode = codes.substring(3, 6);
+        String baseCurrencyCode = codes.substring(0, 3);
+        String targetCurrencyCode = codes.substring(3, 6);
 
 
-            ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
+        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
 
-            ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
+        ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
-            ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);
+        ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
 
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        }
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(jsonResponse);
     }
 
 
