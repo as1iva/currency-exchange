@@ -11,6 +11,7 @@ import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRateRequestDTO;
 import org.as1iva.dto.ExchangeRateResponseDTO;
 import org.as1iva.services.ExchangeRateService;
+import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -34,26 +35,25 @@ public class ExchangeRateServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
+        String codes = pathInfo.substring(1);
 
-        if (pathInfo != null && pathInfo.length() > 1) {
-            String codes = pathInfo.substring(1);
+        ParameterValidator.checkCodePair(codes);
+        // TODO: сделать uppercase
+        String baseCurrencyCode = codes.substring(0, 3);
+        String targetCurrencyCode = codes.substring(3, 6);
 
-            String baseCurrencyCode = codes.substring(0, 3);
-            String targetCurrencyCode = codes.substring(3, 6);
+        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode);
 
-            ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode);
-
-            ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
+        ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
 
-            ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.getByCode(exchangeRateRequestDTO);
+        ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.getByCode(exchangeRateRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
 
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        }
+        resp.setStatus(HttpServletResponse.SC_OK);
+        resp.getWriter().write(jsonResponse);
     }
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
