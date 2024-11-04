@@ -3,6 +3,7 @@ package org.as1iva.services;
 import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
+import org.as1iva.exceptions.DataNotFoundException;
 import org.as1iva.models.Currency;
 
 import java.sql.SQLException;
@@ -38,7 +39,7 @@ public class CurrencyService {
                     currency1.getFullName(),
                     currency1.getSign());
         } else {
-            return new CurrencyResponseDTO(null, null, null, null);
+            throw new DataNotFoundException("Currency not found");
         }
     }
 
