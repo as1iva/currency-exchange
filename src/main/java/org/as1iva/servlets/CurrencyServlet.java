@@ -10,6 +10,7 @@ import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.services.CurrencyService;
+import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;
 
@@ -23,23 +24,22 @@ public class CurrencyServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String pathInfo = req.getPathInfo();
+        String code = pathInfo.substring(1);
+        // TODO: убирать пробелы со всех сторон на входе и сделать uppercase
+        ParameterValidator.checkCode(code);
 
-        if (pathInfo != null && pathInfo.length() > 1) {
-            String code = pathInfo.substring(1);
+        CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code);
 
-            CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code);
-
-            CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
+        CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
 
 
-            CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);
+        CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);
 
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
 
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.getWriter().write(jsonResponse);
-        }
+        resp.setStatus(HttpServletResponse.SC_OK); // TODO: поменять код ответа
+        resp.getWriter().write(jsonResponse);
     }
 
     @Override
