@@ -3,6 +3,7 @@ package org.as1iva.services;
 import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
+import org.as1iva.exceptions.DataExistsException;
 import org.as1iva.exceptions.DataNotFoundException;
 import org.as1iva.models.Currency;
 
@@ -21,6 +22,13 @@ public class CurrencyService {
 
     public CurrencyResponseDTO add(CurrencyRequestDTO currencyRequestDTO)  {
         Currency currency = new Currency(null, currencyRequestDTO.getCode(), currencyRequestDTO.getFullName(), currencyRequestDTO.getSign());
+
+        Optional<Currency> currencyOptional = jdbcCurrencyDAO.getByCode(currencyRequestDTO.getCode());
+
+        if (currencyOptional.isPresent()) {
+            throw new DataExistsException("Currency is already exists");
+        }
+
         currency = jdbcCurrencyDAO.add(currency);
 
         return new CurrencyResponseDTO(currency.getId(), currency.getCode(), currency.getFullName(), currency.getSign());
