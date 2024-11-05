@@ -33,7 +33,7 @@ public class ExchangeRateServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pathInfo = req.getPathInfo();
         String codes = pathInfo.substring(1);
 
@@ -56,7 +56,7 @@ public class ExchangeRateServlet extends HttpServlet {
         resp.getWriter().write(jsonResponse);
     }
 
-    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pathInfo = req.getPathInfo();
         BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         String codes = pathInfo.substring(1);
