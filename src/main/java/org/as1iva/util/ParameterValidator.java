@@ -44,6 +44,10 @@ public final class ParameterValidator {
             throw new InvalidDataException("Rate can't be empty");
         }
 
+        if (!rate.matches("-?\\d+")) {
+            throw new InvalidDataException("Rate must be an integer");
+        }
+
         BigDecimal rateValue = new BigDecimal(rate);
         if (!(rateValue.compareTo(BigDecimal.ZERO) > 0)) {
             throw new InvalidDataException("Rate must be greater than 0");
