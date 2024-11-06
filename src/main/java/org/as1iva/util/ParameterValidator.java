@@ -10,7 +10,7 @@ public final class ParameterValidator {
     }
 
     public static void checkName(String name) {
-        if (name == null || !(name.length() > 1)) {
+        if (name == null || name.isEmpty()) {
             throw new InvalidDataException("Name must be at least 1 character long");
         }
 
