@@ -45,8 +45,9 @@ public final class ParameterValidator {
         }
     }
 
-    public static void checkAmount(Integer amount) {
-        if (!(amount > 0)) {
+    public static void checkAmount(String amount) {
+        int amountValue = Integer.parseInt(amount);
+        if (!(amountValue > 0)) {
             throw new InvalidDataException("Amount must be greater than 0");
         }
     }
