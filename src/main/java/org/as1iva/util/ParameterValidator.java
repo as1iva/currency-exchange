@@ -28,7 +28,7 @@ public final class ParameterValidator {
     }
 
     public static void checkSign(String sign) {
-        if (sign == null || !(sign.length() <= 4)) {
+        if (sign == null || sign.isEmpty() || !(sign.length() <= 4)) {
             throw new InvalidDataException("Sign must be up to 4 characters long");
         }
     }
