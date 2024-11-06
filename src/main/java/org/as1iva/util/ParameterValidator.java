@@ -39,8 +39,9 @@ public final class ParameterValidator {
         }
     }
 
-    public static void checkRate(BigDecimal rate) {
-        if (rate == null || !(rate.compareTo(BigDecimal.ZERO) > 0)) {
+    public static void checkRate(String rate) {
+        BigDecimal rateValue = new BigDecimal(rate);
+        if (!(rateValue.compareTo(BigDecimal.ZERO) > 0)) {
             throw new InvalidDataException("Rate must be greater than 0");
         }
     }
