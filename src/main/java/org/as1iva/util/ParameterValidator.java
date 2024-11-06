@@ -40,6 +40,10 @@ public final class ParameterValidator {
     }
 
     public static void checkRate(String rate) {
+        if (rate == null || rate.isEmpty()) {
+            throw new InvalidDataException("Rate can't be empty");
+        }
+
         BigDecimal rateValue = new BigDecimal(rate);
         if (!(rateValue.compareTo(BigDecimal.ZERO) > 0)) {
             throw new InvalidDataException("Rate must be greater than 0");
