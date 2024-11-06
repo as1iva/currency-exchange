@@ -46,6 +46,10 @@ public final class ParameterValidator {
     }
 
     public static void checkAmount(String amount) {
+        if (amount == null || amount.isEmpty()) {
+            throw new InvalidDataException("Amount can't be empty");
+        }
+
         int amountValue = Integer.parseInt(amount);
         if (!(amountValue > 0)) {
             throw new InvalidDataException("Amount must be greater than 0");
