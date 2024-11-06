@@ -3,6 +3,7 @@ package org.as1iva.util;
 import org.as1iva.exceptions.InvalidDataException;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 
 public final class ParameterValidator {
     private ParameterValidator() {
@@ -17,6 +18,12 @@ public final class ParameterValidator {
     public static void checkCode(String code) {
         if (code == null || !(code.length() == 3)) {
             throw new InvalidDataException("Code must be 3 characters long");
+        }
+
+        try {
+            Currency.getInstance(code);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidDataException("This currency doesn't exist");
         }
     }
 
