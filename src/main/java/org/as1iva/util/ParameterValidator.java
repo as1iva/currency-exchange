@@ -50,6 +50,10 @@ public final class ParameterValidator {
             throw new InvalidDataException("Amount can't be empty");
         }
 
+        if (!amount.matches("-?\\d+")) {
+            throw new InvalidDataException("Amount must be an integer");
+        }
+
         int amountValue = Integer.parseInt(amount);
         if (!(amountValue > 0)) {
             throw new InvalidDataException("Amount must be greater than 0");
