@@ -69,6 +69,7 @@ public class ExchangeRateServlet extends HttpServlet {
             if (line.contains("rate=")) {
                 int index = line.indexOf("rate=");
                 rate = line.substring(index + 5);
+                rate = rate.replace(',','.');
             }
         }
 
