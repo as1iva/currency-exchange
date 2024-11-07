@@ -33,6 +33,7 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         ParameterValidator.checkCode(baseCurrencyCode);
         ParameterValidator.checkCode(targetCurrencyCode);
+        ParameterValidator.checkRate(rate);
 
         BigDecimal rateValue = new BigDecimal(rate);
 
