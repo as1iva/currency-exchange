@@ -2,21 +2,19 @@ package org.as1iva.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.as1iva.util.ErrorHandler;
 
 import java.io.IOException;
 
-@WebFilter("/*")
-public class GlobalServletFilter implements Filter {
+@WebFilter(value = {
+        "/currencies", "/currency/*", "/exchangeRates", "/exchangeRate/*", "/exchange"
+})
+public class GlobalServletFilter extends HttpFilter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        Filter.super.init(filterConfig);
-    }
-
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
@@ -27,10 +25,5 @@ public class GlobalServletFilter implements Filter {
         } catch (Exception e) {
             ErrorHandler.handle((HttpServletResponse) servletResponse, e);
         }
-    }
-
-    @Override
-    public void destroy() {
-        Filter.super.destroy();
     }
 }
