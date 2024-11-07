@@ -22,4 +22,10 @@ public final class ConnectionManager {
             throw new DatabaseException("Database is unavailable");
         }
     }
+
+    public static void close() {
+        if (!dataSource.isClosed()) {
+            dataSource.close();
+        }
+    }
 }
