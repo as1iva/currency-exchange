@@ -2,6 +2,7 @@ package org.as1iva.util;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.as1iva.exceptions.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ public final class ConnectionManager {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DatabaseException("Database is unavailable");
         }
     }
 }
