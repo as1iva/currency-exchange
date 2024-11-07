@@ -42,7 +42,6 @@ public class ExchangeRateServlet extends HttpServlet {
         String targetCurrencyCode = codes.substring(3, 6);
 
         ParameterValidator.checkCodePair(baseCurrencyCode, targetCurrencyCode);
-        // TODO: сделать uppercase
 
 
         ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode);
