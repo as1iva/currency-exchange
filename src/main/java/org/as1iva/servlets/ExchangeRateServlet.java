@@ -64,12 +64,12 @@ public class ExchangeRateServlet extends HttpServlet {
         String codes = pathInfo.substring(1);
         BufferedReader reader = req.getReader();
 
-        String rate1 = null;
+        String rate = null;
         String line;
         while ((line = reader.readLine()) != null) {
             if (line.contains("rate=")) {
                 int index = line.indexOf("rate=");
-                rate1 = line.substring(index + 5);
+                rate = line.substring(index + 5);
             }
         }
 
@@ -77,11 +77,11 @@ public class ExchangeRateServlet extends HttpServlet {
         String targetCurrencyCode = codes.substring(3, 6);
 
         ParameterValidator.checkCodePair(baseCurrencyCode, targetCurrencyCode);
-        ParameterValidator.checkRate(rate1);
+        ParameterValidator.checkRate(rate);
 
-        BigDecimal rate = new BigDecimal(rate1);
+        BigDecimal rateValue = new BigDecimal(rate);
 
-        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
+        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rateValue);
 
         ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
