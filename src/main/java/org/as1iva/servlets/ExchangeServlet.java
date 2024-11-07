@@ -26,13 +26,15 @@ public class ExchangeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
-        Integer amount = Integer.valueOf(req.getParameter("amount"));
+        String amount = req.getParameter("amount");
 
         ParameterValidator.checkCode(baseCurrencyCode);
         ParameterValidator.checkCode(targetCurrencyCode);
         ParameterValidator.checkAmount(amount);
 
-        ExchangeRequestDTO exchangeRequestDTO = new ExchangeRequestDTO(baseCurrencyCode, targetCurrencyCode, amount);
+        Integer amountValue = Integer.valueOf(amount);
+
+        ExchangeRequestDTO exchangeRequestDTO = new ExchangeRequestDTO(baseCurrencyCode, targetCurrencyCode, amountValue);
 
         ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
