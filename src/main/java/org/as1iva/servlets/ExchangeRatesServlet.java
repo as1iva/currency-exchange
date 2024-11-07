@@ -27,9 +27,9 @@ public class ExchangeRatesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String baseCurrencyCode = req.getParameter("baseCurrencyCode");
-        String targetCurrencyCode = req.getParameter("targetCurrencyCode");
-        String rate = req.getParameter("rate");
+        String baseCurrencyCode = req.getParameter("baseCurrencyCode").trim();
+        String targetCurrencyCode = req.getParameter("targetCurrencyCode").trim();
+        String rate = req.getParameter("rate").trim();
 
         ParameterValidator.checkCode(baseCurrencyCode);
         ParameterValidator.checkCode(targetCurrencyCode);
