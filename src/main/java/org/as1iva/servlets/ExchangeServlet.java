@@ -24,9 +24,9 @@ public class ExchangeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        String baseCurrencyCode = req.getParameter("from");
-        String targetCurrencyCode = req.getParameter("to");
-        String amount = req.getParameter("amount");
+        String baseCurrencyCode = req.getParameter("from").trim();
+        String targetCurrencyCode = req.getParameter("to").trim();
+        String amount = req.getParameter("amount").trim();
 
         ParameterValidator.checkCode(baseCurrencyCode);
         ParameterValidator.checkCode(targetCurrencyCode);
