@@ -3,12 +3,12 @@ package org.as1iva.dto;
 public class CurrencyRequestDTO {
     private Integer id;
     private String code;
-    private String fullName;
+    private String name;
     private String sign;
 
-    public CurrencyRequestDTO(String code, String fullName, String sign) {
+    public CurrencyRequestDTO(String code, String name, String sign) {
         this.code = code;
-        this.fullName = fullName;
+        this.name = name;
         this.sign = sign;
     }
 
@@ -32,12 +32,12 @@ public class CurrencyRequestDTO {
         this.code = code;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getSign() {
