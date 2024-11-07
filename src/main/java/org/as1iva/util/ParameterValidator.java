@@ -14,7 +14,7 @@ public final class ParameterValidator {
             throw new InvalidDataException("Name must be at least 1 character long");
         }
 
-        if (!name.matches("^[A-Za-z]+$")) {
+        if (!name.matches("[A-Za-z\\s]+")) {
             throw new InvalidDataException("Name must be a string with english characters");
         }
     }
