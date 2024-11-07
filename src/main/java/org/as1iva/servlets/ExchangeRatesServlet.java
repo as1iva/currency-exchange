@@ -29,12 +29,14 @@ public class ExchangeRatesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String baseCurrencyCode = req.getParameter("baseCurrencyCode");
         String targetCurrencyCode = req.getParameter("targetCurrencyCode");
-        BigDecimal rate = new BigDecimal(req.getParameter("rate"));
+        String rate = req.getParameter("rate");
 
         ParameterValidator.checkCode(baseCurrencyCode);
         ParameterValidator.checkCode(targetCurrencyCode);
 
-        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
+        BigDecimal rateValue = new BigDecimal(rate);
+
+        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rateValue);
 
         ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
