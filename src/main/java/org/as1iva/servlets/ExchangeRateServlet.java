@@ -13,6 +13,7 @@ import org.as1iva.dto.ExchangeRateResponseDTO;
 import org.as1iva.services.ExchangeRateService;
 import org.as1iva.util.ParameterValidator;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 
@@ -58,15 +59,25 @@ public class ExchangeRateServlet extends HttpServlet {
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pathInfo = req.getPathInfo();
-        BigDecimal rate = new BigDecimal(req.getParameter("rate"));
         String codes = pathInfo.substring(1);
+        BufferedReader reader = req.getReader();
 
-        ParameterValidator.checkCodePair(codes);
-        ParameterValidator.checkRate(rate);
+        String rate1 = null;
+        String line;
+        while ((line = reader.readLine()) != null) {
+            if (line.contains("rate=")) {
+                int index = line.indexOf("rate=");
+                rate1 = line.substring(index + 5);
+            }
+        }
 
         String baseCurrencyCode = codes.substring(0, 3);
         String targetCurrencyCode = codes.substring(3, 6);
 
+        ParameterValidator.checkCodePair(baseCurrencyCode, targetCurrencyCode);
+        ParameterValidator.checkRate(rate1);
+
+        BigDecimal rate = new BigDecimal(rate1);
 
         ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rate);
 
