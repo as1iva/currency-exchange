@@ -37,8 +37,9 @@ public final class ParameterValidator {
         }
     }
 
-    public static void checkCodePair(String codes) {
-        if (codes == null || !(codes.length() == 6)) {
+    public static void checkCodePair(String baseCode, String targetCode) {
+        String codes = baseCode + targetCode;
+        if (codes.length() != 6) {
             throw new InvalidDataException("Pair of codes must be 6 characters long");
         }
     }
