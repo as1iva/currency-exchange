@@ -25,7 +25,7 @@ public class CurrencyServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pathInfo = req.getPathInfo();
         String code = pathInfo.substring(1);
-        // TODO: убирать пробелы со всех сторон на входе и сделать uppercase
+
         ParameterValidator.checkCode(code);
 
         CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code);
@@ -38,7 +38,7 @@ public class CurrencyServlet extends HttpServlet {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
 
-        resp.setStatus(HttpServletResponse.SC_OK); // TODO: поменять код ответа
+        resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(jsonResponse);
     }
 
