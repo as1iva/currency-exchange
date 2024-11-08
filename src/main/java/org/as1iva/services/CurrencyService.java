@@ -7,7 +7,6 @@ import org.as1iva.exceptions.DataExistsException;
 import org.as1iva.exceptions.DataNotFoundException;
 import org.as1iva.models.Currency;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

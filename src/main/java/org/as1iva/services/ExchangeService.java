@@ -11,7 +11,6 @@ import org.as1iva.models.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.sql.SQLException;
 import java.util.Optional;
 
 public class ExchangeService {
