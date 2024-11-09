@@ -9,7 +9,7 @@ import org.as1iva.exception.DatabaseException;
 import org.as1iva.model.Currency;
 import org.as1iva.util.ConnectionManager;
 
-public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
+public class JdbcCurrencyDAO implements CurrencyDAO {
 
     private static final JdbcCurrencyDAO INSTANCE = new JdbcCurrencyDAO();
 
