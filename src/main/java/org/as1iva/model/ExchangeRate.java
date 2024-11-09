@@ -1,4 +1,4 @@
-package org.as1iva.models;
+package org.as1iva.model;
 
 import java.math.BigDecimal;
 

@@ -1,13 +1,13 @@
-package org.as1iva.services;
+package org.as1iva.service;
 
 import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
-import org.as1iva.exceptions.DataNotFoundException;
-import org.as1iva.models.Currency;
-import org.as1iva.models.ExchangeRate;
+import org.as1iva.exception.DataNotFoundException;
+import org.as1iva.model.Currency;
+import org.as1iva.model.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

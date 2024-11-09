@@ -1,4 +1,4 @@
-package org.as1iva.exceptions;
+package org.as1iva.exception;
 
 public class DatabaseException extends RuntimeException {
     public DatabaseException(String message) {

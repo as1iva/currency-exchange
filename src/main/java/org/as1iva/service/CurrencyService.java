@@ -1,11 +1,11 @@
-package org.as1iva.services;
+package org.as1iva.service;
 
 import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dto.CurrencyRequestDTO;
 import org.as1iva.dto.CurrencyResponseDTO;
-import org.as1iva.exceptions.DataExistsException;
-import org.as1iva.exceptions.DataNotFoundException;
-import org.as1iva.models.Currency;
+import org.as1iva.exception.DataExistsException;
+import org.as1iva.exception.DataNotFoundException;
+import org.as1iva.model.Currency;
 
 import java.util.ArrayList;
 import java.util.List;

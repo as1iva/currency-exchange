@@ -1,4 +1,4 @@
-package org.as1iva.servlets;
+package org.as1iva.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -10,7 +10,7 @@ import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
-import org.as1iva.services.ExchangeService;
+import org.as1iva.service.ExchangeService;
 import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;

@@ -2,7 +2,7 @@ package org.as1iva.util;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import org.as1iva.exceptions.DatabaseException;
+import org.as1iva.exception.DatabaseException;
 
 import java.sql.Connection;
 import java.sql.SQLException;

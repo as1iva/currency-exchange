@@ -3,7 +3,7 @@ package org.as1iva.util;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import org.as1iva.exceptions.DatabaseException;
+import org.as1iva.exception.DatabaseException;
 
 import java.sql.Driver;
 import java.sql.DriverManager;

@@ -1,8 +1,8 @@
 package org.as1iva.dao;
 
-import org.as1iva.exceptions.DatabaseException;
-import org.as1iva.models.Currency;
-import org.as1iva.models.ExchangeRate;
+import org.as1iva.exception.DatabaseException;
+import org.as1iva.model.Currency;
+import org.as1iva.model.ExchangeRate;
 import org.as1iva.util.ConnectionManager;
 
 import java.sql.Connection;

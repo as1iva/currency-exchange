@@ -1,6 +1,6 @@
 package org.as1iva.util;
 
-import org.as1iva.exceptions.InvalidDataException;
+import org.as1iva.exception.InvalidDataException;
 
 import java.math.BigDecimal;
 import java.util.Currency;

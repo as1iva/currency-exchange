@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.as1iva.exceptions.DatabaseException;
-import org.as1iva.models.Currency;
+import org.as1iva.exception.DatabaseException;
+import org.as1iva.model.Currency;
 import org.as1iva.util.ConnectionManager;
 
 public class JdbcCurrencyDAO implements CurrencyDAO<Currency> {
