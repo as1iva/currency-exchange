@@ -58,6 +58,10 @@ public final class ParameterValidator {
             throw new InvalidDataException("Rate must be a number, which can be an integer or a decimal");
         }
 
+        if (!(rate.length() < 10)) {
+            throw new InvalidDataException("Rate is too long");
+        }
+
         BigDecimal rateValue = new BigDecimal(rate);
         if (!(rateValue.compareTo(BigDecimal.ZERO) > 0)) {
             throw new InvalidDataException("Rate must be greater than 0");
