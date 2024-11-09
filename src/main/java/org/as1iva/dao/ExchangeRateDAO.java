@@ -1,7 +1,9 @@
 package org.as1iva.dao;
 
+import org.as1iva.model.ExchangeRate;
+
 import java.util.Optional;
 
-public interface ExchangeRateDAO<T> extends CrudDAO<T> {
-    Optional<T> getByCode(String baseCurrencyCode, String targetCurrencyCode);
+public interface ExchangeRateDAO extends CrudDAO<ExchangeRate> {
+    Optional<ExchangeRate> getByCode(String baseCurrencyCode, String targetCurrencyCode);
 }
