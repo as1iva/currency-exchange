@@ -17,6 +17,10 @@ public final class ParameterValidator {
         if (!name.matches("[A-Za-z\\s]+")) {
             throw new InvalidDataException("Name must be a string with english characters");
         }
+
+        if (!(name.length() < 25)) {
+            throw new InvalidDataException("Name must be shorter than 25");
+        }
     }
 
     public static void checkCode(String code) {
