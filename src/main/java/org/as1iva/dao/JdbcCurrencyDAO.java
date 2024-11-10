@@ -79,7 +79,7 @@ public class JdbcCurrencyDAO implements CurrencyDAO {
 
             Currency currency = null;
 
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 currency = new Currency(
                         resultSet.getInt("ID"),
                         resultSet.getString("Code"),

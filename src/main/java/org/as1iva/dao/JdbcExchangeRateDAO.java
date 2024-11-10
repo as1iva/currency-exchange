@@ -112,7 +112,7 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
 
             ExchangeRate exchangeRate = null;
 
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 exchangeRate = new ExchangeRate(
                         resultSet.getInt("ExchangeRateId"),
                         new Currency(
