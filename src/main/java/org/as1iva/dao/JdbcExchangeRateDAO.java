@@ -80,7 +80,7 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
     @Override
     public ExchangeRate add(ExchangeRate exchangeRate) {
         try (Connection connection = ConnectionManager.get();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, exchangeRate.getBaseCurrencyCode());
             preparedStatement.setString(2, exchangeRate.getTargetCurrencyCode());
