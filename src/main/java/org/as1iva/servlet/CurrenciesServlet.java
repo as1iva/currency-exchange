@@ -52,18 +52,12 @@ public class CurrenciesServlet extends HttpServlet {
 
         List<CurrencyResponseDTO> currencyResponseDTOS = currencyService.getAll();
 
-        List<String> jsonResponses = new ArrayList<>();
-
         ObjectMapper objectMapper = new ObjectMapper();
 
-        for (CurrencyResponseDTO currency : currencyResponseDTOS) {
-            String jsonResponse = objectMapper.writeValueAsString(currency);
-
-            jsonResponses.add(jsonResponse);
-        }
+        String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTOS);
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(String.valueOf(jsonResponses));
+        resp.getWriter().write(String.valueOf(jsonResponse));
     }
 
     @Override
