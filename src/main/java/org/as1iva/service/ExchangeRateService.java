@@ -76,25 +76,25 @@ public class ExchangeRateService {
         String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
         String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
 
-        Optional<ExchangeRate> exchangeRate = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
 
-        if (exchangeRate.isPresent()) {
-            ExchangeRate exchangeRate1 = exchangeRate.get();
+        if (exchangeRateOptional.isPresent()) {
+            ExchangeRate exchangeRate = exchangeRateOptional.get();
             return new ExchangeRateResponseDTO(
-                    exchangeRate1.getId(),
+                    exchangeRate.getId(),
                     new CurrencyResponseDTO(
-                            exchangeRate1.getBaseCurrency().getId(),
-                            exchangeRate1.getBaseCurrency().getCode(),
-                            exchangeRate1.getBaseCurrency().getFullName(),
-                            exchangeRate1.getBaseCurrency().getSign()
+                            exchangeRate.getBaseCurrency().getId(),
+                            exchangeRate.getBaseCurrency().getCode(),
+                            exchangeRate.getBaseCurrency().getFullName(),
+                            exchangeRate.getBaseCurrency().getSign()
                     ),
                     new CurrencyResponseDTO(
-                            exchangeRate1.getTargetCurrency().getId(),
-                            exchangeRate1.getTargetCurrency().getCode(),
-                            exchangeRate1.getTargetCurrency().getFullName(),
-                            exchangeRate1.getTargetCurrency().getSign()
+                            exchangeRate.getTargetCurrency().getId(),
+                            exchangeRate.getTargetCurrency().getCode(),
+                            exchangeRate.getTargetCurrency().getFullName(),
+                            exchangeRate.getTargetCurrency().getSign()
                     ),
-                    exchangeRate1.getRate()
+                    exchangeRate.getRate()
             );
         } else {
             throw new DataNotFoundException("Exchange rate not found");
