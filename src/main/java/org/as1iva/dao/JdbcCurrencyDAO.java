@@ -65,7 +65,7 @@ public class JdbcCurrencyDAO implements CurrencyDAO {
 
             return currency;
         } catch(SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException("Failed to add currency '" + currency.getCode() + "' to the database");
         }
     }
 
@@ -89,7 +89,7 @@ public class JdbcCurrencyDAO implements CurrencyDAO {
             }
             return Optional.ofNullable(currency);
         } catch(SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException("Failed to read currency '" + code + "' from the database");
         }
     }
 
@@ -112,7 +112,7 @@ public class JdbcCurrencyDAO implements CurrencyDAO {
             }
             return currencies;
         } catch(SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException("Failed to read currencies from the database");
         }
     }
 
@@ -128,7 +128,7 @@ public class JdbcCurrencyDAO implements CurrencyDAO {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException("Failed to update currency '" + currency.getCode() + "' in the database");
         }
     }
 }
