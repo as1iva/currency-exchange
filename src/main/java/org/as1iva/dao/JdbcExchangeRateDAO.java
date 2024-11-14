@@ -96,7 +96,10 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
 
             return exchangeRate;
         } catch (SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException(
+                    String.format("Failed to add exchange rate '%s' to '%s' to the database",
+                            exchangeRate.getBaseCurrencyCode(), exchangeRate.getTargetCurrencyCode())
+            );
         }
     }
 
@@ -132,8 +135,10 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
             }
             return Optional.ofNullable(exchangeRate);
         } catch (SQLException e) {
-            throw new DatabaseException("Database is unavailable");
-        }
+            throw new DatabaseException(
+                    String.format("Failed to read exchange rate '%s' to '%s' from the database",
+                            baseCurrencyCode, targetCurrencyCode)
+            );
     }
 
     @Override
@@ -165,7 +170,7 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
             }
             return exchangeRates;
         } catch (SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException("Failed to read exchange rates from the database");
         }
     }
 
@@ -180,7 +185,10 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DatabaseException("Database is unavailable");
+            throw new DatabaseException(
+                    String.format("Failed to update exchange rate '%s' to '%s' in the database",
+                            exchangeRate.getBaseCurrencyCode(), exchangeRate.getTargetCurrencyCode())
+            );
         }
     }
 }
