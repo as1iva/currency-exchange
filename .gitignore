@@ -15,9 +15,6 @@ mvnw.cmd
 !**/src/main/**/target/
 !**/src/test/**/target/
 
-### SQLite ###
-src/main/resources/identifier.sqlite
-
 ### IntelliJ IDEA ###
 .idea/
 .idea/modules.xml
