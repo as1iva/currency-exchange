@@ -21,6 +21,9 @@ import java.util.List;
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
 
+    ObjectMapper objectMapper = new ObjectMapper();
+    ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String baseCurrencyCode = req.getParameter("baseCurrencyCode").trim();
@@ -38,12 +41,8 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, rateValue);
 
-        ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
-
-
         ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.add(exchangeRateRequestDTO);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
 
         resp.setStatus(HttpServletResponse.SC_CREATED);
@@ -52,14 +51,9 @@ public class ExchangeRatesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
-
-
         List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = exchangeRateService.getAll();
 
         List<String> jsonResponses = new ArrayList<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
 
         for (ExchangeRateResponseDTO exchangeRate : exchangeRateResponseDTOS) {
             String jsonResponse = objectMapper.writeValueAsString(exchangeRate);

@@ -18,6 +18,9 @@ import java.io.IOException;
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
 
+    ObjectMapper objectMapper = new ObjectMapper();
+    ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String baseCurrencyCode = req.getParameter("from").trim();
@@ -32,11 +35,8 @@ public class ExchangeServlet extends HttpServlet {
 
         ExchangeRequestDTO exchangeRequestDTO = new ExchangeRequestDTO(baseCurrencyCode, targetCurrencyCode, amountValue);
 
-        ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
-
         ExchangeResponseDTO exchangeResponseDTO = exchangeService.exchange(exchangeRequestDTO);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(exchangeResponseDTO);
 
         resp.setStatus(HttpServletResponse.SC_OK);

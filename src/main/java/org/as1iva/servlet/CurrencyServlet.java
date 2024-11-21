@@ -17,6 +17,9 @@ import java.io.IOException;
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
 
+    ObjectMapper objectMapper = new ObjectMapper();
+    CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String pathInfo = req.getPathInfo();
@@ -26,12 +29,8 @@ public class CurrencyServlet extends HttpServlet {
 
         CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code, null, null);
 
-        CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
-
-
         CurrencyResponseDTO currencyResponseDTO = currencyService.getByCode(currencyRequestDTO);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
 
         resp.setStatus(HttpServletResponse.SC_OK);

@@ -19,6 +19,9 @@ import java.util.List;
 @WebServlet("/currencies")
 public class CurrenciesServlet extends HttpServlet {
 
+    ObjectMapper objectMapper = new ObjectMapper();
+    CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String code = req.getParameter("code").trim().toUpperCase();
@@ -31,11 +34,8 @@ public class CurrenciesServlet extends HttpServlet {
 
         CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code, name, sign);
 
-        CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
-
         CurrencyResponseDTO currencyResponseDTO = currencyService.add(currencyRequestDTO);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
 
         resp.setStatus(HttpServletResponse.SC_CREATED);
@@ -44,11 +44,7 @@ public class CurrenciesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
-
         List<CurrencyResponseDTO> currencyResponseDTOS = currencyService.getAll();
-
-        ObjectMapper objectMapper = new ObjectMapper();
 
         String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTOS);
 
