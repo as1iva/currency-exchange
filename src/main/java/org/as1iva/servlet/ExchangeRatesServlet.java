@@ -32,8 +32,6 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         rate = rate.replace(',','.');
 
-        ParameterValidator.checkCode(baseCurrencyCode);
-        ParameterValidator.checkCode(targetCurrencyCode);
         ParameterValidator.checkCodePair(baseCurrencyCode, targetCurrencyCode);
         ParameterValidator.checkRate(rate);
 
