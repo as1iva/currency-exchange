@@ -44,7 +44,7 @@ public class ExchangeRateServlet extends HttpServlet {
         ParameterValidator.checkCodePair(baseCurrencyCode, targetCurrencyCode);
 
 
-        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode);
+        ExchangeRateRequestDTO exchangeRateRequestDTO = new ExchangeRateRequestDTO(baseCurrencyCode, targetCurrencyCode, null);
 
         ExchangeRateService exchangeRateService = new ExchangeRateService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
 
