@@ -36,18 +36,15 @@ public class CurrencyService {
     public CurrencyResponseDTO getByCode(CurrencyRequestDTO currencyRequestDTO) {
         String code = currencyRequestDTO.getCode();
 
-        Optional<Currency> currencyOptional = jdbcCurrencyDAO.getByCode(code);
+        Currency currency = jdbcCurrencyDAO.getByCode(code)
+                .orElseThrow(() -> new DataNotFoundException("Currency not found"));
 
-        if (currencyOptional.isPresent()) {
-            Currency currency = currencyOptional.get();
-            return new CurrencyResponseDTO(
-                    currency.getId(),
-                    currency.getCode(),
-                    currency.getFullName(),
-                    currency.getSign());
-        } else {
-            throw new DataNotFoundException("Currency not found");
-        }
+        return new CurrencyResponseDTO(
+                currency.getId(),
+                currency.getCode(),
+                currency.getFullName(),
+                currency.getSign()
+        );
     }
 
     public List<CurrencyResponseDTO> getAll() {
