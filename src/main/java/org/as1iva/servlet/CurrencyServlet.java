@@ -28,7 +28,7 @@ public class CurrencyServlet extends HttpServlet {
 
         ParameterValidator.checkCode(code);
 
-        CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code);
+        CurrencyRequestDTO currencyRequestDTO = new CurrencyRequestDTO(code, null, null);
 
         CurrencyService currencyService = new CurrencyService(JdbcCurrencyDAO.getInstance());
 
