@@ -26,47 +26,38 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateResponseDTO add(ExchangeRateRequestDTO exchangeRateRequestDTO) {
-        Optional<Currency> baseCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode());
-        Optional<Currency> targetCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode());
+        Currency baseCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getBaseCurrencyCode())
+                .orElseThrow(() -> new DataNotFoundException("Base currency not found"));
 
-        if (baseCurrency.isEmpty() && targetCurrency.isEmpty()) {
-            throw new DataNotFoundException("No currency was found");
-        } else if (baseCurrency.isEmpty()) {
-            throw new DataNotFoundException("Base currency not found");
-        } else if (targetCurrency.isEmpty()) {
-            throw new DataNotFoundException("Target currency not found");
-        }
+        Currency targetCurrency = jdbcCurrencyDAO.getByCode(exchangeRateRequestDTO.getTargetCurrencyCode())
+                .orElseThrow(() -> new DataNotFoundException("Target currency not found"));
 
         ExchangeRate exchangeRate = new ExchangeRate(
                 null,
-                baseCurrency.get().getCode(),
-                targetCurrency.get().getCode(),
+                baseCurrency.getCode(),
+                targetCurrency.getCode(),
                 exchangeRateRequestDTO.getRate());
 
-        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(
-                baseCurrency.get().getCode(),
-                targetCurrency.get().getCode()
-        );
-
-        if (exchangeRateOptional.isPresent()) {
-            throw new DataExistsException("Exchange rate already exists");
-        }
+        jdbcExchangeRateDAO.getByCode(baseCurrency.getCode(), targetCurrency.getCode())
+                .ifPresent(existingExchangeRate -> {
+                    throw new DataExistsException("Exchange rate already exists");
+                });
 
         exchangeRate = jdbcExchangeRateDAO.add(exchangeRate);
 
         return new ExchangeRateResponseDTO(
                 exchangeRate.getId(),
                 new CurrencyResponseDTO(
-                        baseCurrency.get().getId(),
-                        baseCurrency.get().getCode(),
-                        baseCurrency.get().getFullName(),
-                        baseCurrency.get().getSign()
+                        baseCurrency.getId(),
+                        baseCurrency.getCode(),
+                        baseCurrency.getFullName(),
+                        baseCurrency.getSign()
                 ),
                 new CurrencyResponseDTO(
-                        targetCurrency.get().getId(),
-                        targetCurrency.get().getCode(),
-                        targetCurrency.get().getFullName(),
-                        targetCurrency.get().getSign()
+                        targetCurrency.getId(),
+                        targetCurrency.getCode(),
+                        targetCurrency.getFullName(),
+                        targetCurrency.getSign()
                 ),
                 exchangeRate.getRate()
         );
