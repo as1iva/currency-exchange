@@ -20,7 +20,7 @@ public class CurrencyService {
     }
 
     public CurrencyResponseDTO add(CurrencyRequestDTO currencyRequestDTO)  {
-        Currency currency = new Currency(null, currencyRequestDTO.getCode(), currencyRequestDTO.getFullName(), currencyRequestDTO.getSign());
+        Currency currency = new Currency(null, currencyRequestDTO.getCode(), currencyRequestDTO.getName(), currencyRequestDTO.getSign());
 
         Optional<Currency> currencyOptional = jdbcCurrencyDAO.getByCode(currencyRequestDTO.getCode());
 
