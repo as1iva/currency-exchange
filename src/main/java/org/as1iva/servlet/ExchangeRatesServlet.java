@@ -43,25 +43,15 @@ public class ExchangeRatesServlet extends HttpServlet {
 
         ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.add(exchangeRateRequestDTO);
 
-        String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
-
         resp.setStatus(HttpServletResponse.SC_CREATED);
-        resp.getWriter().write(jsonResponse);
+        objectMapper.writeValue(resp.getWriter(), exchangeRateResponseDTO);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<ExchangeRateResponseDTO> exchangeRateResponseDTOS = exchangeRateService.getAll();
 
-        List<String> jsonResponses = new ArrayList<>();
-
-        for (ExchangeRateResponseDTO exchangeRate : exchangeRateResponseDTOS) {
-            String jsonResponse = objectMapper.writeValueAsString(exchangeRate);
-
-            jsonResponses.add(jsonResponse);
-        }
-
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(String.valueOf(jsonResponses));
+        objectMapper.writeValue(resp.getWriter(), exchangeRateResponseDTOS);
     }
 }

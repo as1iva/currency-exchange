@@ -47,10 +47,8 @@ public class ExchangeRateServlet extends HttpServlet {
 
         ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.getByCode(exchangeRateRequestDTO);
 
-        String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
-
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(jsonResponse);
+        objectMapper.writeValue(resp.getWriter(), exchangeRateResponseDTO);
     }
 
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -80,9 +78,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
         ExchangeRateResponseDTO exchangeRateResponseDTO = exchangeRateService.update(exchangeRateRequestDTO);
 
-        String jsonResponse = objectMapper.writeValueAsString(exchangeRateResponseDTO);
-
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(jsonResponse);
+        objectMapper.writeValue(resp.getWriter(), exchangeRateResponseDTO);
     }
 }

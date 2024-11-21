@@ -37,9 +37,7 @@ public class ExchangeServlet extends HttpServlet {
 
         ExchangeResponseDTO exchangeResponseDTO = exchangeService.exchange(exchangeRequestDTO);
 
-        String jsonResponse = objectMapper.writeValueAsString(exchangeResponseDTO);
-
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(jsonResponse);
+        objectMapper.writeValue(resp.getWriter(), exchangeResponseDTO);
     }
 }

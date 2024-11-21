@@ -36,19 +36,15 @@ public class CurrenciesServlet extends HttpServlet {
 
         CurrencyResponseDTO currencyResponseDTO = currencyService.add(currencyRequestDTO);
 
-        String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTO);
-
         resp.setStatus(HttpServletResponse.SC_CREATED);
-        resp.getWriter().write(jsonResponse);
+        objectMapper.writeValue(resp.getWriter(), currencyResponseDTO);
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<CurrencyResponseDTO> currencyResponseDTOS = currencyService.getAll();
 
-        String jsonResponse = objectMapper.writeValueAsString(currencyResponseDTOS);
-
         resp.setStatus(HttpServletResponse.SC_OK);
-        resp.getWriter().write(String.valueOf(jsonResponse));
+        objectMapper.writeValue(resp.getWriter(), currencyResponseDTOS);
     }
 }
