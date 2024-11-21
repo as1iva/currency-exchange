@@ -1,9 +1,9 @@
 package org.as1iva.dto;
 
-public class ExchangeRequestDTO {
-    private String baseCurrencyCode;
-    private String targetCurrencyCode;
-    private Integer amount;
+public final class ExchangeRequestDTO {
+    private final String baseCurrencyCode;
+    private final String targetCurrencyCode;
+    private final Integer amount;
 
     public ExchangeRequestDTO(String baseCurrencyCode, String targetCurrencyCode, Integer amount) {
         this.baseCurrencyCode = baseCurrencyCode;
@@ -15,23 +15,11 @@ public class ExchangeRequestDTO {
         return baseCurrencyCode;
     }
 
-    public void setBaseCurrencyCode(String baseCurrencyCode) {
-        this.baseCurrencyCode = baseCurrencyCode;
-    }
-
     public String getTargetCurrencyCode() {
         return targetCurrencyCode;
     }
 
-    public void setTargetCurrencyCode(String targetCurrencyCode) {
-        this.targetCurrencyCode = targetCurrencyCode;
-    }
-
     public Integer getAmount() {
         return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
     }
 }
