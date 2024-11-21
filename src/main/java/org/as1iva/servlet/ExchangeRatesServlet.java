@@ -1,7 +1,6 @@
 package org.as1iva.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import org.as1iva.util.ParameterValidator;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/exchangeRates")

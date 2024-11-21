@@ -13,7 +13,6 @@ import org.as1iva.model.ExchangeRate;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class ExchangeRateService {
 
