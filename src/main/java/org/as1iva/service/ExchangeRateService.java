@@ -76,29 +76,25 @@ public class ExchangeRateService {
         String baseCurrencyCode = exchangeRateRequestDTO.getBaseCurrencyCode();
         String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
 
-        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        ExchangeRate exchangeRate = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode)
+                .orElseThrow(() -> new DataNotFoundException("Exchange rate not found"));
 
-        if (exchangeRateOptional.isPresent()) {
-            ExchangeRate exchangeRate = exchangeRateOptional.get();
-            return new ExchangeRateResponseDTO(
-                    exchangeRate.getId(),
-                    new CurrencyResponseDTO(
-                            exchangeRate.getBaseCurrency().getId(),
-                            exchangeRate.getBaseCurrency().getCode(),
-                            exchangeRate.getBaseCurrency().getFullName(),
-                            exchangeRate.getBaseCurrency().getSign()
-                    ),
-                    new CurrencyResponseDTO(
-                            exchangeRate.getTargetCurrency().getId(),
-                            exchangeRate.getTargetCurrency().getCode(),
-                            exchangeRate.getTargetCurrency().getFullName(),
-                            exchangeRate.getTargetCurrency().getSign()
-                    ),
-                    exchangeRate.getRate()
-            );
-        } else {
-            throw new DataNotFoundException("Exchange rate not found");
-        }
+        return new ExchangeRateResponseDTO(
+                exchangeRate.getId(),
+                new CurrencyResponseDTO(
+                        exchangeRate.getBaseCurrency().getId(),
+                        exchangeRate.getBaseCurrency().getCode(),
+                        exchangeRate.getBaseCurrency().getFullName(),
+                        exchangeRate.getBaseCurrency().getSign()
+                ),
+                new CurrencyResponseDTO(
+                        exchangeRate.getTargetCurrency().getId(),
+                        exchangeRate.getTargetCurrency().getCode(),
+                        exchangeRate.getTargetCurrency().getFullName(),
+                        exchangeRate.getTargetCurrency().getSign()
+                ),
+                exchangeRate.getRate()
+        );
     }
 
     public List<ExchangeRateResponseDTO> getAll() {
@@ -140,13 +136,9 @@ public class ExchangeRateService {
 
         jdbcExchangeRateDAO.update(exchangeRate);
 
-        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
+        exchangeRate = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode)
+                .orElseThrow(() -> new DataNotFoundException("Exchange rate not found"));
 
-        if (exchangeRateOptional.isEmpty()) {
-            throw new DataNotFoundException("Exchange rate not found");
-        }
-
-        exchangeRate = exchangeRateOptional.get();
         return new ExchangeRateResponseDTO(
                 exchangeRate.getId(),
                 new CurrencyResponseDTO(
