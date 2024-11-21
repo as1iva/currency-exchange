@@ -74,9 +74,4 @@ public class ExchangeRatesServlet extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.getWriter().write(String.valueOf(jsonResponses));
     }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-    }
 }
