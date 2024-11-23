@@ -13,9 +13,6 @@ public class Currency {
         this.sign = sign;
     }
 
-    public Currency() {
-    }
-
     public Integer getId() {
         return id;
     }
@@ -46,15 +43,5 @@ public class Currency {
 
     public void setSign(String sign) {
         this.sign = sign;
-    }
-
-    @Override
-    public String toString() {
-        return "Currency{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", sign='" + sign + '\'' +
-                '}';
     }
 }
