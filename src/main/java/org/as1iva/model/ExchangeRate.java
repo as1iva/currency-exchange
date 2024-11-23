@@ -46,9 +46,6 @@ public class ExchangeRate {
         this.targetCurrency = targetCurrency;
     }
 
-    public ExchangeRate() {
-    }
-
     public Integer getId() {
         return id;
     }
@@ -79,15 +76,5 @@ public class ExchangeRate {
 
     public void setRate(BigDecimal rate) {
         this.rate = rate;
-    }
-
-    @Override
-    public String toString() {
-        return "ExchangeRate{" +
-                "id=" + id +
-                ", baseCurrencyCode=" + baseCurrencyCode +
-                ", targetCurrencyCode=" + targetCurrencyCode +
-                ", rate=" + rate +
-                '}';
     }
 }
