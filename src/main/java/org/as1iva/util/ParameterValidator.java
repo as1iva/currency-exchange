@@ -4,17 +4,20 @@ import org.as1iva.exception.InvalidDataException;
 
 import java.math.BigDecimal;
 import java.util.Currency;
+import java.util.regex.Pattern;
 
 public final class ParameterValidator {
     private ParameterValidator() {
     }
 
     public static void checkName(String name) {
+        Pattern pattern = Pattern.compile("[A-Za-z\\s]+");
+
         if (name == null || name.isEmpty()) {
             throw new InvalidDataException("Name must be at least 1 character long");
         }
 
-        if (!name.matches("[A-Za-z\\s]+")) {
+        if (!pattern.matcher(name).matches()) {
             throw new InvalidDataException("Name must be a string with english characters");
         }
 
@@ -54,11 +57,13 @@ public final class ParameterValidator {
     }
 
     public static void checkRate(String rate) {
+        Pattern pattern = Pattern.compile("^-?\\d+(\\.\\d+)?$");
+
         if (rate == null || rate.isEmpty()) {
             throw new InvalidDataException("Rate can't be empty");
         }
 
-        if (!rate.matches("^-?\\d+(\\.\\d+)?$")) {
+        if (!pattern.matcher(rate).matches()) {
             throw new InvalidDataException("Rate must be a number, which can be an integer or a decimal");
         }
 
@@ -73,11 +78,13 @@ public final class ParameterValidator {
     }
 
     public static void checkAmount(String amount) {
+        Pattern pattern = Pattern.compile("-?\\d+");
+
         if (amount == null || amount.isEmpty()) {
             throw new InvalidDataException("Amount can't be empty");
         }
 
-        if (!amount.matches("-?\\d+")) {
+        if (!pattern.matcher(amount).matches()) {
             throw new InvalidDataException("Amount must be an integer");
         }
 
