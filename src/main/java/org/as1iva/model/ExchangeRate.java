@@ -3,6 +3,7 @@ package org.as1iva.model;
 import java.math.BigDecimal;
 
 public class ExchangeRate {
+
     private Integer id;
     private Currency baseCurrency;
     private Currency targetCurrency;

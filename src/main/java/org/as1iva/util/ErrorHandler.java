@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ErrorHandler {
+
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
     private ErrorHandler() {
     }
 

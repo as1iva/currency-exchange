@@ -12,6 +12,7 @@ import java.util.Enumeration;
 
 @WebListener
 public class ApplicationCleaner implements ServletContextListener {
+
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         ConnectionManager.close();

@@ -8,8 +8,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public final class ConnectionManager {
-    private static final HikariConfig config = new HikariConfig("/application.properties");
 
+    private static final HikariConfig config = new HikariConfig("/application.properties");
     private static final HikariDataSource dataSource = new HikariDataSource(config);
 
     private ConnectionManager() {

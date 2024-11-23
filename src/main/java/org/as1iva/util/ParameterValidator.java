@@ -7,6 +7,7 @@ import java.util.Currency;
 import java.util.regex.Pattern;
 
 public final class ParameterValidator {
+
     private ParameterValidator() {
     }
 

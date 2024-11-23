@@ -14,6 +14,7 @@ import java.util.Optional;
 import static java.math.MathContext.DECIMAL64;
 
 public class ExchangeService {
+
     private final JdbcExchangeRateDAO jdbcExchangeRateDAO;
 
     public ExchangeService(JdbcExchangeRateDAO jdbcExchangeRateDAO) {

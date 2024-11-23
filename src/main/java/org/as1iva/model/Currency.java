@@ -1,6 +1,7 @@
 package org.as1iva.model;
 
 public class Currency {
+
     private Integer id;
     private String code;
     private String fullName;
