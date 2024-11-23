@@ -33,8 +33,8 @@ public class ExchangeRateService {
 
         ExchangeRate exchangeRate = new ExchangeRate(
                 null,
-                baseCurrency.getCode(),
-                targetCurrency.getCode(),
+                baseCurrency,
+                targetCurrency,
                 exchangeRateRequestDTO.getRate());
 
         jdbcExchangeRateDAO.getByCode(baseCurrency.getCode(), targetCurrency.getCode())
@@ -118,10 +118,15 @@ public class ExchangeRateService {
         String targetCurrencyCode = exchangeRateRequestDTO.getTargetCurrencyCode();
         BigDecimal rate = exchangeRateRequestDTO.getRate();
 
+        Currency baseCurrency = jdbcCurrencyDAO.getByCode(baseCurrencyCode)
+                .orElseThrow(() -> new DataNotFoundException("Currency not found"));
+        Currency targetCurrency = jdbcCurrencyDAO.getByCode(targetCurrencyCode)
+                .orElseThrow(() -> new DataNotFoundException("Currency not found"));
+
         ExchangeRate exchangeRate = new ExchangeRate(
                 null,
-                baseCurrencyCode,
-                targetCurrencyCode,
+                baseCurrency,
+                targetCurrency,
                 rate);
 
         jdbcExchangeRateDAO.update(exchangeRate);

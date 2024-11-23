@@ -82,8 +82,8 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setString(1, exchangeRate.getBaseCurrencyCode());
-            preparedStatement.setString(2, exchangeRate.getTargetCurrencyCode());
+            preparedStatement.setString(1, exchangeRate.getBaseCurrency().getCode());
+            preparedStatement.setString(2, exchangeRate.getTargetCurrency().getCode());
             preparedStatement.setBigDecimal(3, exchangeRate.getRate());
 
             preparedStatement.executeUpdate();
@@ -98,7 +98,7 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
         } catch (SQLException e) {
             throw new DatabaseException(
                     String.format("Failed to add exchange rate '%s' to '%s' to the database",
-                            exchangeRate.getBaseCurrencyCode(), exchangeRate.getTargetCurrencyCode())
+                            exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode())
             );
         }
     }
@@ -139,6 +139,7 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
                     String.format("Failed to read exchange rate '%s' to '%s' from the database",
                             baseCurrencyCode, targetCurrencyCode)
             );
+        }
     }
 
     @Override
@@ -180,14 +181,14 @@ public class JdbcExchangeRateDAO implements ExchangeRateDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
 
             preparedStatement.setBigDecimal(1, exchangeRate.getRate());
-            preparedStatement.setString(2, exchangeRate.getBaseCurrencyCode());
-            preparedStatement.setString(3, exchangeRate.getTargetCurrencyCode());
+            preparedStatement.setString(2, exchangeRate.getBaseCurrency().getCode());
+            preparedStatement.setString(3, exchangeRate.getTargetCurrency().getCode());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new DatabaseException(
                     String.format("Failed to update exchange rate '%s' to '%s' in the database",
-                            exchangeRate.getBaseCurrencyCode(), exchangeRate.getTargetCurrencyCode())
+                            exchangeRate.getBaseCurrency().getCode(), exchangeRate.getTargetCurrency().getCode())
             );
         }
     }
