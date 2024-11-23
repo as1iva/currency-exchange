@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
@@ -18,7 +17,7 @@ import java.io.IOException;
 public class ExchangeServlet extends HttpServlet {
 
     ObjectMapper objectMapper = new ObjectMapper();
-    ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance(), JdbcCurrencyDAO.getInstance());
+    ExchangeService exchangeService = new ExchangeService(JdbcExchangeRateDAO.getInstance());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

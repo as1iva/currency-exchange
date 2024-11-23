@@ -1,124 +1,109 @@
 package org.as1iva.service;
 
-import org.as1iva.dao.JdbcCurrencyDAO;
 import org.as1iva.dao.JdbcExchangeRateDAO;
 import org.as1iva.dto.CurrencyResponseDTO;
 import org.as1iva.dto.ExchangeRequestDTO;
 import org.as1iva.dto.ExchangeResponseDTO;
 import org.as1iva.exception.DataNotFoundException;
-import org.as1iva.model.Currency;
 import org.as1iva.model.ExchangeRate;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 
+import static java.math.MathContext.DECIMAL64;
+
 public class ExchangeService {
     private final JdbcExchangeRateDAO jdbcExchangeRateDAO;
-    private final JdbcCurrencyDAO jdbcCurrencyDAO;
 
-    public ExchangeService(JdbcExchangeRateDAO jdbcExchangeRateDAO, JdbcCurrencyDAO jdbcCurrencyDAO) {
+    public ExchangeService(JdbcExchangeRateDAO jdbcExchangeRateDAO) {
         this.jdbcExchangeRateDAO = jdbcExchangeRateDAO;
-        this.jdbcCurrencyDAO = jdbcCurrencyDAO;
     }
 
     public ExchangeResponseDTO exchange(ExchangeRequestDTO exchangeRequestDTO) {
-        String baseCurrencyCode = exchangeRequestDTO.getBaseCurrencyCode();
-        String targetCurrencyCode = exchangeRequestDTO.getTargetCurrencyCode();
+        ExchangeRate exchangeRate = findExchangeRate(exchangeRequestDTO)
+                .orElseThrow(() -> new DataNotFoundException("No exchange rates was found"));
+
         Integer amount = exchangeRequestDTO.getAmount();
 
-        Optional<ExchangeRate> directExchangeRateOptional = jdbcExchangeRateDAO.getByCode(baseCurrencyCode, targetCurrencyCode);
-        Optional<ExchangeRate> reverseExchangeRateOptional = jdbcExchangeRateDAO.getByCode(targetCurrencyCode, baseCurrencyCode);
+        BigDecimal convertedAmount = BigDecimal.valueOf(amount)
+                .multiply(exchangeRate.getRate())
+                .setScale(2, RoundingMode.HALF_EVEN);
 
-        Optional<ExchangeRate> usdToBaseOptional = jdbcExchangeRateDAO.getByCode("USD", baseCurrencyCode);
-        Optional<ExchangeRate> usdToTargetOptional = jdbcExchangeRateDAO.getByCode("USD", targetCurrencyCode);
+        return new ExchangeResponseDTO(
+                new CurrencyResponseDTO(
+                        exchangeRate.getBaseCurrency().getId(),
+                        exchangeRate.getBaseCurrency().getCode(),
+                        exchangeRate.getBaseCurrency().getFullName(),
+                        exchangeRate.getBaseCurrency().getSign()
+                ),
+                new CurrencyResponseDTO(
+                        exchangeRate.getTargetCurrency().getId(),
+                        exchangeRate.getTargetCurrency().getCode(),
+                        exchangeRate.getTargetCurrency().getFullName(),
+                        exchangeRate.getTargetCurrency().getSign()
+                ),
+                exchangeRate.getRate(),
+                amount,
+                convertedAmount
+        );
+    }
 
-        Optional<Currency> baseCurrencyOptional = jdbcCurrencyDAO.getByCode(baseCurrencyCode);
-        Optional<Currency> targetCurrencyOptional = jdbcCurrencyDAO.getByCode(targetCurrencyCode);
+    private Optional<ExchangeRate> findExchangeRate(ExchangeRequestDTO exchangeRequestDTO) {
+        Optional<ExchangeRate> exchangeRate = findByDirectRate(exchangeRequestDTO);
 
-        if (directExchangeRateOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
-            ExchangeRate exchangeRate = directExchangeRateOptional.get();
-            Currency baseCurrency = baseCurrencyOptional.get();
-            Currency targetCurrency = targetCurrencyOptional.get();
-
-            BigDecimal rate = exchangeRate.getRate();
-
-            BigDecimal convertedAmount = rate.multiply(BigDecimal.valueOf(amount));
-
-            return new ExchangeResponseDTO(
-                    new CurrencyResponseDTO(
-                            baseCurrency.getId(),
-                            baseCurrency.getCode(),
-                            baseCurrency.getFullName(),
-                            baseCurrency.getSign()
-                    ),
-                    new CurrencyResponseDTO(
-                            targetCurrency.getId(),
-                            targetCurrency.getCode(),
-                            targetCurrency.getFullName(),
-                            targetCurrency.getSign()
-                    ),
-                    rate,
-                    amount,
-                    convertedAmount
-            );
-        } else if (reverseExchangeRateOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
-            ExchangeRate exchangeRate = reverseExchangeRateOptional.get();
-            Currency baseCurrency = baseCurrencyOptional.get();
-            Currency targetCurrency = targetCurrencyOptional.get();
-
-            BigDecimal dividend = new BigDecimal("1");
-
-            BigDecimal rate = dividend.divide(exchangeRate.getRate(), 6, RoundingMode.HALF_UP);
-
-            BigDecimal convertedAmount = rate.multiply(BigDecimal.valueOf(amount));
-
-            return new ExchangeResponseDTO(
-                    new CurrencyResponseDTO(
-                            baseCurrency.getId(),
-                            baseCurrency.getCode(),
-                            baseCurrency.getFullName(),
-                            baseCurrency.getSign()
-                    ),
-                    new CurrencyResponseDTO(
-                            targetCurrency.getId(),
-                            targetCurrency.getCode(),
-                            targetCurrency.getFullName(),
-                            targetCurrency.getSign()
-                    ),
-                    rate,
-                    amount,
-                    convertedAmount
-            );
-        } else if (usdToBaseOptional.isPresent() && usdToTargetOptional.isPresent() && baseCurrencyOptional.isPresent() && targetCurrencyOptional.isPresent()) {
-            ExchangeRate usdToBase = usdToBaseOptional.get();
-            ExchangeRate usdToTarget = usdToTargetOptional.get();
-            Currency baseCurrency = baseCurrencyOptional.get();
-            Currency targetCurrency = targetCurrencyOptional.get();
-
-            BigDecimal rate = usdToBase.getRate().divide(usdToTarget.getRate(), 6, RoundingMode.HALF_UP);
-
-            BigDecimal convertedAmount = rate.multiply(BigDecimal.valueOf(amount));
-
-            return new ExchangeResponseDTO(
-                    new CurrencyResponseDTO(
-                            baseCurrency.getId(),
-                            baseCurrency.getCode(),
-                            baseCurrency.getFullName(),
-                            baseCurrency.getSign()
-                    ),
-                    new CurrencyResponseDTO(
-                            targetCurrency.getId(),
-                            targetCurrency.getCode(),
-                            targetCurrency.getFullName(),
-                            targetCurrency.getSign()
-                    ),
-                    rate,
-                    amount,
-                    convertedAmount
-            );
-        } else {
-            throw new DataNotFoundException("No exchange rates was found");
+        if (exchangeRate.isEmpty()) {
+            exchangeRate = findByIndirectRate(exchangeRequestDTO);
         }
+
+        if (exchangeRate.isEmpty()) {
+            exchangeRate = findByCrossRate(exchangeRequestDTO);
+        }
+
+        return exchangeRate;
+    }
+
+    private Optional<ExchangeRate> findByDirectRate(ExchangeRequestDTO exchangeRequestDTO) {
+        return jdbcExchangeRateDAO.getByCode(exchangeRequestDTO.getBaseCurrencyCode(), exchangeRequestDTO.getTargetCurrencyCode());
+    }
+
+    private Optional<ExchangeRate> findByIndirectRate(ExchangeRequestDTO exchangeRequestDTO) {
+        Optional<ExchangeRate> exchangeRateOptional = jdbcExchangeRateDAO.getByCode(exchangeRequestDTO.getTargetCurrencyCode(), exchangeRequestDTO.getBaseCurrencyCode());
+
+        if (exchangeRateOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        ExchangeRate exchangeRate = exchangeRateOptional.get();
+
+        BigDecimal rate = BigDecimal.ONE.divide(exchangeRate.getRate(), DECIMAL64)
+                .setScale(6, RoundingMode.HALF_EVEN);
+
+        return Optional.of(new ExchangeRate(
+                exchangeRate.getTargetCurrency(),
+                exchangeRate.getBaseCurrency(),
+                rate
+        ));
+    }
+
+    private Optional<ExchangeRate> findByCrossRate(ExchangeRequestDTO exchangeRequestDTO) {
+        Optional<ExchangeRate> usdToBaseOptional = jdbcExchangeRateDAO.getByCode("USD", exchangeRequestDTO.getBaseCurrencyCode());
+        Optional<ExchangeRate> usdToTargetOptional = jdbcExchangeRateDAO.getByCode("USD", exchangeRequestDTO.getTargetCurrencyCode());
+
+        if (usdToBaseOptional.isEmpty() || usdToTargetOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        ExchangeRate usdToBase = usdToBaseOptional.get();
+        ExchangeRate usdToTarget = usdToTargetOptional.get();
+
+        BigDecimal rate = usdToBase.getRate().divide(usdToTarget.getRate(), DECIMAL64)
+                .setScale(6, RoundingMode.HALF_EVEN);
+
+        return Optional.of(new ExchangeRate(
+                usdToBase.getTargetCurrency(),
+                usdToTarget.getBaseCurrency(),
+                rate
+        ));
     }
 }
